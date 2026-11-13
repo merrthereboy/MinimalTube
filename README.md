@@ -1,69 +1,104 @@
-# MinimalTube — Ứng dụng xem YouTube Tối Giản Không Quảng Cáo
+# MinimalTube
 
-Dự án ứng dụng Android xem YouTube thuần văn bản (Brutalist / Minimalist Monochrome), không chứa bất kỳ icon đồ họa hay emoji nào, tích hợp trực tiếp thư viện `NewPipeExtractor` để bóc tách luồng phát trực tiếp sạch quảng cáo từ YouTube.
+<p align="center">
+  <strong>A minimalist, ad-free YouTube client for Android engineered with pure typography.</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/merrthereboy/MinimalTube/releases/latest">
+    <img src="https://img.shields.io/github/v/release/merrthereboy/MinimalTube?style=flat-square&color=white&label=Release" alt="Latest Release">
+  </a>
+  <a href="https://github.com/merrthereboy/MinimalTube/actions/workflows/build-apk.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/merrthereboy/MinimalTube/build-apk.yml?style=flat-square&label=Build" alt="Build Status">
+  </a>
+  <img src="https://img.shields.io/badge/Platform-Android%207.0%2B-black?style=flat-square" alt="Android Version">
+  <img src="https://img.shields.io/badge/License-GPL--3.0-gray?style=flat-square" alt="License">
+</p>
 
 ---
 
-## 1. Đặc điểm nổi bật
-- **100% Tiếng Việt:** Toàn bộ chuỗi hiển thị, nhãn điều hướng, thông báo đều bằng tiếng Việt chuẩn hóa.
-- **Phong cách Tối giản Tuyệt đối (Text-Only / Flat Monochrome):**
-  - Không có bất kỳ icon, sticker hay emoji nào.
-  - Sử dụng các tab văn bản: `TRANG CHỦ`, `XU HƯỚNG`, `TÌM KIẾM`.
-  - Các nút hành động bằng chữ trong khung viền dứt khoát: `[ PHÁT ]`, `[ TẢI VỀ ]`, `[ LƯU ]`.
-  - Nền đen sâu `#000000` AMOLED tiết kiệm pin tối đa.
-- **Tích hợp NewPipeExtractor:** Giải mã luồng video trực tiếp từ YouTube, không dùng API của Google, không phụ thuộc Google Play Services.
-- **Trình phát ExoPlayer:** Phát video mượt mà 1080p/720p hoàn toàn không có quảng cáo đứt quãng.
+## Overview
+
+**MinimalTube** is an open-source, privacy-first Android application designed for users who seek a distraction-free video viewing experience. Unlike conventional media clients that clutter the screen with animations, cartoon icons, and algorithmic distractions, MinimalTube strips away all decorative visuals in favor of a clean, high-contrast typography interface.
+
+The application leverages [NewPipeExtractor](https://github.com/TeamNewPipe/NewPipeExtractor) to parse media streams directly from YouTube servers without proprietary Google Play Services or user tracking.
 
 ---
 
-## 2. Cấu trúc Dự án
+## Key Features
+
+- **Strictly Ad-Free Playback:** Bypasses video advertisements, sponsored banners, and tracking telemetry by streaming direct media links.
+- **Pure Typography Design (Zero Emojis, Zero Icons):** Every navigation element, status indicator, and interaction button is driven purely by clean text and minimalist geometric borders.
+- **AMOLED Deep Black Theme:** Fully native `#000000` canvas engineered to reduce eye fatigue and minimize battery consumption on OLED displays.
+- **Hardware-Accelerated Engine:** Integrates Google's `androidx.media3:media3-exoplayer` for low-latency streaming up to 1080p resolution.
+- **Privacy & Lightweight:** No Google login required, zero telemetry, and an ultra-compact APK size under 11 MB.
+
+---
+
+## Interface Concept
+
 ```
-MinimalTube/
-├── app/
-│   ├── build.gradle                 # Cấu hình dependency NewPipeExtractor & ExoPlayer
-│   └── src/main/
-│       ├── AndroidManifest.xml      # Khai báo quyền Internet và Activity
-│       ├── java/com/minimal/tube/
-│       │   ├── MinimalTubeApp.kt    # Khởi tạo NewPipe với Downloader
-│       │   ├── DownloaderImpl.kt    # Bộ tải OkHttp cho NewPipeExtractor
-│       │   ├── MainActivity.kt      # Điều hướng Tabs, Tìm kiếm, Phát video
-│       │   ├── VideoAdapter.kt      # Hiển thị danh sách video theo thẻ tối giản
-│       │   └── VideoItem.kt         # Data model video
-│       └── res/
-│           ├── layout/
-│           │   ├── activity_main.xml # Giao diện chính với thanh tab chữ
-│           │   └── item_video.xml    # Thẻ video tối giản không icon
-│           └── values/
-│               ├── strings.xml       # Chuẩn hóa tiếng Việt, không emoji
-│               ├── colors.xml        # Bảng màu đen/trắng tương phản cao
-│               └── themes.xml        # Theme Material AMOLED NoActionBar
-└── .github/workflows/
-    └── build-apk.yml                # CI/CD tự động xuất file APK trên GitHub Actions
+[ TRANG CHỦ ]    [ XU HƯỚNG ]    [ TÌM KIẾM ]
+────────────────────────────────────────────────────────────
+
+┌──────────────────────────────────────────────────────────┐
+│                                                          │
+│                   VIDEO THUMBNAIL (16:9)                 │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+TIÊU ĐỀ VIDEO HIỂN THỊ RÕ RÀNG KHÔNG BIỂU TƯỢNG
+Kênh Đăng Tải • 1.2M Lượt xem • 2 ngày trước
+
+[ PHÁT ]    [ TẢI VỀ ]    [ LƯU ]
+────────────────────────────────────────────────────────────
 ```
 
 ---
 
-## 3. Hướng dẫn Xuất file APK để cài lên điện thoại
+## Download & Installation
 
-### Cách 1: Tận dụng GitHub Actions (Khuyên dùng - Nhanh nhất, không cần cài Android Studio)
-Nhờ gói **GitHub Pro** bạn vừa được duyệt, bạn có 3.000 phút máy ảo build code miễn phí mỗi tháng:
-1. Tạo 1 repository mới trên GitHub cá nhân (đặt tên là `MinimalTube`).
-2. Đẩy toàn bộ mã nguồn trong thư mục này lên GitHub:
-   ```bash
-   git init
-   git add .
-   git commit -m "Khoi tao MinimalTube thuan text khong icon"
-   git branch -M main
-   git remote add origin https://github.com/TÊN_CỦA_BẠN/MinimalTube.git
-   git push -u origin main
-   ```
-3. Truy cập tab **Actions** trên repo GitHub của bạn $\rightarrow$ Hệ thống sẽ tự động biên dịch toàn bộ mã nguồn trong ~2 phút.
-4. Bấm vào bản build thành công $\rightarrow$ Tải file **`MinimalTube-Debug-APK`** về điện thoại và cài đặt!
+The latest pre-compiled APK binary is available directly on the GitHub Releases page:
+
+👉 **[Download Latest APK (MinimalTube-v1.0.0.apk)](https://github.com/merrthereboy/MinimalTube/releases/latest)**
+
+### Installation Steps:
+1. Download the `.apk` file to your Android device (Android 7.0 / API 24 or newer).
+2. Open the downloaded file and grant permission for **"Install from unknown sources"** if prompted by your browser or file manager.
+3. Complete installation and launch MinimalTube.
 
 ---
 
-### Cách 2: Mở và Build bằng Android Studio
-1. Mở **Android Studio** $\rightarrow$ Chọn **Open** $\rightarrow$ Trỏ tới thư mục `MinimalTube`.
-2. Đợi Gradle đồng bộ (Sync) xong.
-3. Chọn menu **Build** $\rightarrow$ **Build Bundle(s) / APK(s)** $\rightarrow$ **Build APK(s)**.
-4. File APK sẽ nằm tại: `app/build/outputs/apk/debug/app-debug.apk`.
+## Tech Stack & Architecture
+
+- **Language:** Kotlin 1.9
+- **Media Engine:** AndroidX Media3 ExoPlayer (`1.2.1`)
+- **Extraction Core:** [NewPipeExtractor](https://github.com/TeamNewPipe/NewPipeExtractor) (`v0.24.5`)
+- **HTTP Client:** Square OkHttp (`4.12.0`)
+- **Image Pipeline:** Coil (`2.5.0`)
+- **CI/CD Automation:** GitHub Actions (automated compilation & release pipeline)
+
+---
+
+## Building from Source
+
+### Prerequisites
+- JDK 17 or higher
+- Android SDK (API 34)
+
+### Build via Command Line
+```bash
+# Clone the repository
+git clone https://github.com/merrthereboy/MinimalTube.git
+cd MinimalTube
+
+# Compile Debug APK
+./gradlew assembleDebug
+```
+The compiled output will be generated at:
+`app/build/outputs/apk/debug/app-debug.apk`
+
+---
+
+## Disclaimer
+
+MinimalTube is an independent open-source client developed under Fair Use principles and the GNU General Public License v3.0. This project is not affiliated with, maintained by, or endorsed by Google LLC or YouTube. All trademarks belong to their respective owners.

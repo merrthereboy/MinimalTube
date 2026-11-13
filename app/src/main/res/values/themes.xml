@@ -1,0 +1,10 @@
+<resources>
+    <style name="Theme.MinimalTube" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/bg_black</item>
+        <item name="android:statusBarColor">@color/bg_black</item>
+        <item name="android:navigationBarColor">@color/bg_black</item>
+        <item name="colorPrimary">@color/text_white</item>
+        <item name="colorSecondary">@color/text_muted</item>
+        <item name="colorSurface">@color/card_black</item>
+    </style>
+</resources>

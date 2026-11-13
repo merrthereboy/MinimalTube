@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">MinimalTube</string>
+    <string name="tab_home">TRANG CHỦ</string>
+    <string name="tab_trending">XU HƯỚNG</string>
+    <string name="tab_search">TÌM KIẾM</string>
+    <string name="search_hint">Nhập tên video hoặc từ khóa...</string>
+    <string name="btn_search_action">TÌM</string>
+    <string name="btn_play">PHÁT</string>
+    <string name="btn_download">TẢI VỀ</string>
+    <string name="btn_save">LƯU</string>
+    <string name="btn_close_player">ĐÓNG TRÌNH PHÁT</string>
+    <string name="loading_text">ĐANG TẢI DỮ LIỆU...</string>
+    <string name="error_loading">KHÔNG THỂ TẢI DỮ LIỆU. VUI LÒNG THỬ LẠI.</string>
+    <string name="playing_status">ĐANG PHÁT:</string>
+</resources>

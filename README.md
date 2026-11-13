@@ -59,7 +59,7 @@ Kênh Đăng Tải • 1.2M Lượt xem • 2 ngày trước
 
 The latest pre-compiled APK binary is available directly on the GitHub Releases page:
 
-👉 **[Download Latest APK (MinimalTube-v1.0.0.apk)](https://github.com/merrthereboy/MinimalTube/releases/latest)**
+👉 **[Download Latest APK (MinimalTube-v1.0.1.apk)](https://github.com/merrthereboy/MinimalTube/releases/latest)**
 
 ### Installation Steps:
 1. Download the `.apk` file to your Android device (Android 7.0 / API 24 or newer).

@@ -3,129 +3,148 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_black"
+    android:background="@color/bg_dark"
     android:orientation="vertical">
 
-    <!-- Top Navigation Bar (Pure Text Tabs) -->
+    <!-- Top Luxury Header & Brand -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/bg_black"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp">
-
-        <TextView
-            android:id="@+id/tabHome"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="@string/tab_home"
-            android:textColor="@color/text_white"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tabTrending"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="@string/tab_trending"
-            android:textColor="@color/text_muted"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/tabSearchToggle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingHorizontal="10dp"
-            android:text="@string/tab_search"
-            android:textColor="@color/text_muted"
-            android:textSize="12sp" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MINIMAL"
+            android:text="MINIMALTUBE"
             android:textColor="@color/text_muted"
-            android:textSize="10sp"
-            android:textStyle="bold" />
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.15" />
+
+        <!-- Floating Rounded Pill Tabs -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tabHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:background="@drawable/bg_pill_active"
+                    android:gravity="center"
+                    android:paddingHorizontal="18dp"
+                    android:text="@string/tab_home"
+                    android:textColor="@color/pill_active_text"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tabTrending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_pill_inactive"
+                    android:gravity="center"
+                    android:paddingHorizontal="18dp"
+                    android:text="@string/tab_trending"
+                    android:textColor="@color/pill_inactive_text"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/tabSearchToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_pill_inactive"
+                    android:gravity="center"
+                    android:paddingHorizontal="18dp"
+                    android:text="@string/tab_search"
+                    android:textColor="@color/pill_inactive_text"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </HorizontalScrollView>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/border_gray" />
-
-    <!-- Search Input Area (Toggles visibility) -->
+    <!-- Search Input Area (Pill Design) -->
     <LinearLayout
         android:id="@+id/searchContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_black"
         android:orientation="horizontal"
-        android:padding="12dp"
+        android:paddingHorizontal="18dp"
+        android:paddingBottom="12dp"
         android:visibility="gone">
 
         <EditText
             android:id="@+id/edtSearchQuery"
             android:layout_width="0dp"
-            android:layout_height="36dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
-            android:background="@drawable/border_input"
+            android:background="@drawable/bg_search_pill"
             android:hint="@string/search_hint"
             android:imeOptions="actionSearch"
             android:inputType="text"
-            android:paddingHorizontal="12dp"
-            android:textColor="@color/text_white"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/text_primary"
             android:textColorHint="@color/text_muted"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/btnDoSearch"
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/border_button"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_button_pill_primary"
             android:gravity="center"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="20dp"
             android:text="@string/btn_search_action"
-            android:textColor="@color/text_white"
-            android:textSize="12sp"
+            android:textColor="@color/button_primary_text"
+            android:textSize="11sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Embedded Player View Section -->
+    <!-- Embedded Player View Section (Rounded Luxury Card) -->
     <LinearLayout
         android:id="@+id/playerSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_black"
         android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="12dp"
         android:visibility="gone">
 
-        <androidx.media3.ui.PlayerView
-            android:id="@+id/playerView"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:background="@color/bg_black"
-            app:resize_mode="fit"
-            app:use_controller="true" />
+            app:cardBackgroundColor="@color/bg_dark"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp">
+
+            <androidx.media3.ui.PlayerView
+                android:id="@+id/playerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_dark"
+                app:resize_mode="fit"
+                app:use_controller="true" />
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:paddingTop="10dp">
 
             <TextView
                 android:id="@+id/txtCurrentPlayingTitle"
@@ -134,7 +153,7 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/text_white"
+                android:textColor="@color/text_primary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
@@ -142,22 +161,17 @@
                 android:id="@+id/btnClosePlayer"
                 android:layout_width="wrap_content"
                 android:layout_height="28dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/border_button"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/bg_button_pill_secondary"
                 android:gravity="center"
-                android:paddingHorizontal="12dp"
+                android:paddingHorizontal="14dp"
                 android:text="@string/btn_close_player"
                 android:textColor="@color/text_muted"
                 android:textSize="10sp" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/border_gray" />
     </LinearLayout>
 
-    <!-- Loading / Status indicator -->
+    <!-- Status text / Loading -->
     <TextView
         android:id="@+id/txtStatus"
         android:layout_width="match_parent"
@@ -169,12 +183,14 @@
         android:textSize="12sp"
         android:visibility="gone" />
 
-    <!-- Video List -->
+    <!-- Video List with rounded cards -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewVideos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
+        android:paddingHorizontal="14dp"
+        android:paddingTop="6dp"
         android:paddingBottom="24dp" />
 
 </LinearLayout>

@@ -11,8 +11,8 @@ android {
         applicationId "com.minimal.tube"
         minSdk 24
         targetSdk 34
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 2
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,12 +38,13 @@ dependencies {
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.cardview:cardview:1.0.0'
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
 
-    // NewPipeExtractor & OkHttp (cho network client)
-    implementation 'com.github.TeamNewPipe:NewPipeExtractor:v0.24.5'
+    // NewPipeExtractor phiên bản mới nhất v0.27.1 (khắc phục lỗi thay đổi thuật toán YouTube)
+    implementation 'com.github.TeamNewPipe:NewPipeExtractor:v0.27.1'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 
     // ExoPlayer cho phát video sạch không quảng cáo

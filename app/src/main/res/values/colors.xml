@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg_black">#000000</color>
-    <color name="card_black">#09090B</color>
-    <color name="text_white">#FFFFFF</color>
-    <color name="text_muted">#71717A</color>
-    <color name="border_gray">#27272A</color>
-    <color name="border_light">#52525B</color>
-    <color name="surface_dark">#18181B</color>
+    <!-- Luxury Dark Palette (Obsidian & Titanium) -->
+    <color name="bg_dark">#0B0C10</color>
+    <color name="card_surface">#14151D</color>
+    <color name="card_border">#252736</color>
+
+    <color name="pill_active_bg">#FFFFFF</color>
+    <color name="pill_active_text">#0B0C10</color>
+    
+    <color name="pill_inactive_bg">#181A24</color>
+    <color name="pill_inactive_border">#2A2C3C</color>
+    <color name="pill_inactive_text">#8E92A4</color>
+
+    <color name="button_primary_bg">#FFFFFF</color>
+    <color name="button_primary_text">#0B0C10</color>
+
+    <color name="button_secondary_bg">#1E202C</color>
+    <color name="button_secondary_border">#303345</color>
+    <color name="button_secondary_text">#C4C7D7</color>
+
+    <color name="text_primary">#F8F9FA</color>
+    <color name="text_muted">#848799</color>
+    <color name="search_bg">#151620</color>
+    <color name="search_border">#2B2D3D</color>
 </resources>

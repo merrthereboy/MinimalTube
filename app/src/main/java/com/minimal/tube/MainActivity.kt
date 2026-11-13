@@ -50,8 +50,8 @@ class MainActivity : AppCompatActivity() {
         initExoPlayer()
         setupListeners()
 
-        // Tải trang chủ mặc định lúc mở app
-        loadTrendingVideos()
+        // Khởi động tải Trang chủ
+        loadTrendingVideos(isTrendingTab = false)
     }
 
     private fun initViews() {
@@ -88,19 +88,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         tabHome.setOnClickListener {
-            setActiveTab(tabHome)
+            setActivePillTab(tabHome)
             searchContainer.visibility = View.GONE
-            loadTrendingVideos()
+            loadTrendingVideos(isTrendingTab = false)
         }
 
         tabTrending.setOnClickListener {
-            setActiveTab(tabTrending)
+            setActivePillTab(tabTrending)
             searchContainer.visibility = View.GONE
-            loadTrendingVideos()
+            loadTrendingVideos(isTrendingTab = true)
         }
 
         tabSearchToggle.setOnClickListener {
-            setActiveTab(tabSearchToggle)
+            setActivePillTab(tabSearchToggle)
             if (searchContainer.visibility == View.VISIBLE) {
                 searchContainer.visibility = View.GONE
             } else {
@@ -132,35 +132,41 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setActiveTab(selectedTab: TextView) {
-        val white = ContextCompat.getColor(this, R.color.text_white)
-        val muted = ContextCompat.getColor(this, R.color.text_muted)
+    private fun setActivePillTab(selectedTab: TextView) {
+        val activeBg = ContextCompat.getDrawable(this, R.drawable.bg_pill_active)
+        val inactiveBg = ContextCompat.getDrawable(this, R.drawable.bg_pill_inactive)
+        val activeTextColor = ContextCompat.getColor(this, R.color.pill_active_text)
+        val inactiveTextColor = ContextCompat.getColor(this, R.color.pill_inactive_text)
 
-        tabHome.setTextColor(if (selectedTab == tabHome) white else muted)
-        tabTrending.setTextColor(if (selectedTab == tabTrending) white else muted)
-        tabSearchToggle.setTextColor(if (selectedTab == tabSearchToggle) white else muted)
+        val tabs = listOf(tabHome, tabTrending, tabSearchToggle)
+        tabs.forEach { tab ->
+            if (tab == selectedTab) {
+                tab.background = activeBg
+                tab.setTextColor(activeTextColor)
+            } else {
+                tab.background = inactiveBg
+                tab.setTextColor(inactiveTextColor)
+            }
+        }
     }
 
-    private fun loadTrendingVideos() {
-        showStatus("ĐANG TẢI XU HƯỚNG YOUTUBE...")
+    private fun loadTrendingVideos(isTrendingTab: Boolean) {
+        showStatus(if (isTrendingTab) "ĐANG NẠP XU HƯỚNG MỚI NHẤT..." else "ĐANG NẠP DANH SÁCH ĐỀ XUẤT...")
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val service = ServiceList.YouTube
-                val kiosk = service.kioskList.defaultKioskExtractor
-                kiosk.fetchPage()
-
-                val videoList = kiosk.initialPage.items
-                    .filterIsInstance<StreamInfoItem>()
-                    .map { item ->
-                        VideoItem(
-                            url = item.url,
-                            title = item.name,
-                            uploaderName = item.uploaderName.orEmpty(),
-                            viewCount = item.viewCount,
-                            uploadDate = item.textualUploadDate.orEmpty(),
-                            thumbnailUrl = item.thumbnails.firstOrNull()?.url
-                        )
-                    }
+                
+                // Thử tải qua Kiosk; nếu YouTube đổi cấu trúc thẻ, chuyển sang tìm kiếm thịnh hành làm fallback
+                val videoList = try {
+                    val kiosk = service.kioskList.defaultKioskExtractor
+                    kiosk.fetchPage()
+                    kiosk.initialPage.items.filterIsInstance<StreamInfoItem>().map { mapToItem(it) }
+                } catch (e: Exception) {
+                    val fallbackKeyword = if (isTrendingTab) "thịnh hành việt nam hôm nay" else "nhạc hot trending việt nam"
+                    val search = service.getSearchExtractor(fallbackKeyword)
+                    search.fetchPage()
+                    search.initialPage.items.filterIsInstance<StreamInfoItem>().map { mapToItem(it) }
+                }
 
                 withContext(Dispatchers.Main) {
                     hideStatus()
@@ -184,16 +190,7 @@ class MainActivity : AppCompatActivity() {
 
                 val videoList = searchExtractor.initialPage.items
                     .filterIsInstance<StreamInfoItem>()
-                    .map { item ->
-                        VideoItem(
-                            url = item.url,
-                            title = item.name,
-                            uploaderName = item.uploaderName.orEmpty(),
-                            viewCount = item.viewCount,
-                            uploadDate = item.textualUploadDate.orEmpty(),
-                            thumbnailUrl = item.thumbnails.firstOrNull()?.url
-                        )
-                    }
+                    .map { mapToItem(it) }
 
                 withContext(Dispatchers.Main) {
                     hideStatus()
@@ -210,16 +207,21 @@ class MainActivity : AppCompatActivity() {
     private fun playVideo(item: VideoItem) {
         txtCurrentPlayingTitle.text = item.title
         playerSection.visibility = View.VISIBLE
-        showStatus("ĐANG GIẢI MÃ LUỒNG VIDEO KHÔNG QUẢNG CÁO...")
+        showStatus("ĐANG KẾT NỐI LUỒNG PHÁT SẠCH...")
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val service = ServiceList.YouTube
                 val streamInfo = StreamInfo.getInfo(service, item.url)
 
-                // Lấy luồng video chất lượng trực tiếp từ NewPipeExtractor
-                val streamUrl = streamInfo.videoStreams.firstOrNull()?.content
-                    ?: streamInfo.videoOnlyStreams.firstOrNull()?.content
+                // Tìm luồng phát phù hợp nhất (ưu tiên luồng tích hợp cả hình và tiếng, hoặc luồng tốt nhất)
+                val videoStream = streamInfo.videoStreams
+                    .filter { !it.isVideoOnly }
+                    .maxByOrNull { it.resolution.filter { c -> c.isDigit() }.toIntOrNull() ?: 0 }
+                    ?: streamInfo.videoStreams.firstOrNull()
+                    ?: streamInfo.videoOnlyStreams.firstOrNull()
+
+                val streamUrl = videoStream?.content
 
                 if (!streamUrl.isNullOrEmpty()) {
                     withContext(Dispatchers.Main) {
@@ -232,7 +234,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 } else {
                     withContext(Dispatchers.Main) {
-                        showStatus("KHÔNG TÌM THẤY LUỒNG PHÁT HỢP LỆ.")
+                        showStatus("KHÔNG TÌM THẤY LUỒNG PHÁT TƯƠNG THÍCH.")
                     }
                 }
             } catch (e: Exception) {
@@ -241,6 +243,17 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun mapToItem(item: StreamInfoItem): VideoItem {
+        return VideoItem(
+            url = item.url,
+            title = item.name,
+            uploaderName = item.uploaderName.orEmpty(),
+            viewCount = item.viewCount,
+            uploadDate = item.textualUploadDate.orEmpty(),
+            thumbnailUrl = item.thumbnails.firstOrNull()?.url
+        )
     }
 
     private fun showStatus(msg: String) {

@@ -11,23 +11,29 @@ import android.widget.EditText
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MimeTypes
+import androidx.media3.common.PlaybackParameters
+import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.PlayerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.schabi.newpipe.extractor.ServiceList
-import org.schabi.newpipe.extractor.services.youtube.extractors.YoutubeSubscriptionExtractor
 import org.schabi.newpipe.extractor.stream.StreamInfo
 import org.schabi.newpipe.extractor.stream.StreamInfoItem
 
@@ -51,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     // Tab Containers
     private lateinit var tabContentHome: LinearLayout
-    private lateinit var tabContentShorts: LinearLayout
+    private lateinit var tabContentShorts: View
     private lateinit var tabContentSubscriptions: LinearLayout
     private lateinit var tabContentLibrary: ScrollView
     private lateinit var tabContentProfile: ScrollView
@@ -76,17 +82,20 @@ class MainActivity : AppCompatActivity() {
 
     // RecyclerViews & Adapters
     private lateinit var recyclerViewHome: RecyclerView
-    private lateinit var recyclerViewShorts: RecyclerView
+    private lateinit var viewPagerShorts: ViewPager2
+    private lateinit var recyclerViewSubChannels: RecyclerView
     private lateinit var recyclerViewSubs: RecyclerView
     private lateinit var recyclerViewHistory: RecyclerView
 
     private lateinit var homeAdapter: VideoAdapter
-    private lateinit var shortsAdapter: VideoAdapter
+    private lateinit var shortsPagerAdapter: ShortsPagerAdapter
+    private lateinit var subChannelsAdapter: ChannelBarAdapter
     private lateinit var subsAdapter: VideoAdapter
     private lateinit var historyAdapter: VideoAdapter
 
     // Fans Zone (Subscriptions) views
     private lateinit var cardSubsNotLoggedIn: LinearLayout
+    private lateinit var layoutLoggedInSubs: LinearLayout
     private lateinit var btnSubsLogin: LinearLayout
 
     // Library Views
@@ -99,17 +108,41 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnProfileGoogleLogin: LinearLayout
     private lateinit var txtProfileLoginAction: TextView
 
-    // Player Section
+    // Player Section & Gestures
     private lateinit var playerSection: LinearLayout
     private lateinit var playerView: PlayerView
     private lateinit var txtCurrentPlayingTitle: TextView
+    private lateinit var txtCurrentPlayingChannel: TextView
+    private lateinit var btnOpenComments: TextView
+    private lateinit var btnMinimizePlayer: ImageView
     private lateinit var btnClosePlayer: ImageView
+    private lateinit var btnPlayerQuality: TextView
+    private lateinit var btnPlayerSpeed: TextView
+
+    // Player HUD
+    private lateinit var hudVolume: View
+    private lateinit var txtVolumePercent: TextView
+    private lateinit var progressVolume: ProgressBar
+    private lateinit var hudBrightness: View
+    private lateinit var txtBrightnessPercent: TextView
+    private lateinit var progressBrightness: ProgressBar
+    private lateinit var hudSeek: View
+    private lateinit var txtSeekText: TextView
+
+    // Mini Player
+    private lateinit var miniPlayerSection: LinearLayout
+    private lateinit var txtMiniPlayerTitle: TextView
+    private lateinit var txtMiniPlayerChannel: TextView
+    private lateinit var btnMiniPlayerPlayPause: ImageView
+    private lateinit var btnMiniPlayerClose: ImageView
+
     private var exoPlayer: ExoPlayer? = null
+    private var currentPlayingItem: VideoItem? = null
+    private var currentPlayingUrl: String = ""
 
     // Status / Message
     private lateinit var txtStatus: TextView
 
-    // Current active tab index (0: Home, 1: Shorts, 2: Subs, 3: Library, 4: Profile)
     private var currentTabIndex = 0
 
     private val loginLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -129,12 +162,13 @@ class MainActivity : AppCompatActivity() {
 
         initViews()
         initExoPlayer()
+        setupPlayerGestures()
         setupBottomNavigation()
         setupChips()
         setupSearch()
         updateAccountUI()
 
-        // Khởi động tải dữ liệu Trang chủ
+        // Nạp trang chủ mặc định
         loadHomeFeed("tất cả")
     }
 
@@ -177,11 +211,13 @@ class MainActivity : AppCompatActivity() {
         txtNavProfile = findViewById(R.id.txtNavProfile)
 
         recyclerViewHome = findViewById(R.id.recyclerViewHome)
-        recyclerViewShorts = findViewById(R.id.recyclerViewShorts)
+        viewPagerShorts = findViewById(R.id.viewPagerShorts)
+        recyclerViewSubChannels = findViewById(R.id.recyclerViewSubChannels)
         recyclerViewSubs = findViewById(R.id.recyclerViewSubs)
         recyclerViewHistory = findViewById(R.id.recyclerViewHistory)
 
         cardSubsNotLoggedIn = findViewById(R.id.cardSubsNotLoggedIn)
+        layoutLoggedInSubs = findViewById(R.id.layoutLoggedInSubs)
         btnSubsLogin = findViewById(R.id.btnSubsLogin)
 
         btnClearHistory = findViewById(R.id.btnClearHistory)
@@ -195,54 +231,132 @@ class MainActivity : AppCompatActivity() {
         playerSection = findViewById(R.id.playerSection)
         playerView = findViewById(R.id.playerView)
         txtCurrentPlayingTitle = findViewById(R.id.txtCurrentPlayingTitle)
+        txtCurrentPlayingChannel = findViewById(R.id.txtCurrentPlayingChannel)
+        btnOpenComments = findViewById(R.id.btnOpenComments)
+        btnMinimizePlayer = findViewById(R.id.btnMinimizePlayer)
         btnClosePlayer = findViewById(R.id.btnClosePlayer)
+        btnPlayerQuality = findViewById(R.id.btnPlayerQuality)
+        btnPlayerSpeed = findViewById(R.id.btnPlayerSpeed)
+
+        hudVolume = findViewById(R.id.hudVolume)
+        txtVolumePercent = findViewById(R.id.txtVolumePercent)
+        progressVolume = findViewById(R.id.progressVolume)
+        hudBrightness = findViewById(R.id.hudBrightness)
+        txtBrightnessPercent = findViewById(R.id.txtBrightnessPercent)
+        progressBrightness = findViewById(R.id.progressBrightness)
+        hudSeek = findViewById(R.id.hudSeek)
+        txtSeekText = findViewById(R.id.txtSeekText)
+
+        miniPlayerSection = findViewById(R.id.miniPlayerSection)
+        txtMiniPlayerTitle = findViewById(R.id.txtMiniPlayerTitle)
+        txtMiniPlayerChannel = findViewById(R.id.txtMiniPlayerChannel)
+        btnMiniPlayerPlayPause = findViewById(R.id.btnMiniPlayerPlayPause)
+        btnMiniPlayerClose = findViewById(R.id.btnMiniPlayerClose)
+
         txtStatus = findViewById(R.id.txtStatus)
 
         // Setup Adapters
         homeAdapter = VideoAdapter(
             onPlayClick = { playVideo(it) },
-            onDownloadClick = { Toast.makeText(this, "Tính năng tải về: ${it.title}", Toast.LENGTH_SHORT).show() }
+            onDownloadClick = { Toast.makeText(this, "Chuẩn bị tải: ${it.title}", Toast.LENGTH_SHORT).show() },
+            onChannelClick = { openChannel(it.uploaderName, it.url) }
         )
         recyclerViewHome.layoutManager = LinearLayoutManager(this)
         recyclerViewHome.adapter = homeAdapter
 
-        shortsAdapter = VideoAdapter(
-            onPlayClick = { playVideo(it) }
+        shortsPagerAdapter = ShortsPagerAdapter(
+            onPlayClick = { playVideo(it) },
+            onCommentClick = { CommentsBottomSheet(this, lifecycleScope).show(it.url) },
+            onChannelClick = { openChannel(it.uploaderName, it.url) }
         )
-        recyclerViewShorts.layoutManager = LinearLayoutManager(this)
-        recyclerViewShorts.adapter = shortsAdapter
+        viewPagerShorts.adapter = shortsPagerAdapter
+
+        subChannelsAdapter = ChannelBarAdapter(
+            onChannelClick = { channel ->
+                val intent = Intent(this, ChannelActivity::class.java).apply {
+                    putExtra(ChannelActivity.EXTRA_CHANNEL_URL, "https://www.youtube.com/channel/${channel.channelId}")
+                    putExtra(ChannelActivity.EXTRA_CHANNEL_NAME, channel.name)
+                    putExtra(ChannelActivity.EXTRA_CHANNEL_AVATAR, channel.avatarUrl)
+                }
+                startActivity(intent)
+            }
+        )
+        recyclerViewSubChannels.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewSubChannels.adapter = subChannelsAdapter
 
         subsAdapter = VideoAdapter(
-            onPlayClick = { playVideo(it) }
+            onPlayClick = { playVideo(it) },
+            onChannelClick = { openChannel(it.uploaderName, it.url) }
         )
         recyclerViewSubs.layoutManager = LinearLayoutManager(this)
         recyclerViewSubs.adapter = subsAdapter
 
         historyAdapter = VideoAdapter(
-            onPlayClick = { playVideo(it) }
+            onPlayClick = { playVideo(it) },
+            onChannelClick = { openChannel(it.uploaderName, it.url) }
         )
         recyclerViewHistory.layoutManager = LinearLayoutManager(this)
         recyclerViewHistory.adapter = historyAdapter
 
-        // Player Close
+        // Player Section buttons
         btnClosePlayer.setOnClickListener {
-            exoPlayer?.stop()
-            playerSection.visibility = View.GONE
+            stopPlayback()
         }
 
-        // Subscriptions Login CTA
+        btnMinimizePlayer.setOnClickListener {
+            playerSection.visibility = View.GONE
+            miniPlayerSection.visibility = View.VISIBLE
+        }
+
+        miniPlayerSection.setOnClickListener {
+            miniPlayerSection.visibility = View.GONE
+            playerSection.visibility = View.VISIBLE
+        }
+
+        btnMiniPlayerClose.setOnClickListener {
+            stopPlayback()
+        }
+
+        btnMiniPlayerPlayPause.setOnClickListener {
+            exoPlayer?.let { player ->
+                if (player.isPlaying) {
+                    player.pause()
+                } else {
+                    player.play()
+                }
+            }
+        }
+
+        btnOpenComments.setOnClickListener {
+            if (currentPlayingUrl.isNotEmpty()) {
+                CommentsBottomSheet(this, lifecycleScope).show(currentPlayingUrl)
+            }
+        }
+
+        txtCurrentPlayingChannel.setOnClickListener {
+            currentPlayingItem?.let {
+                openChannel(it.uploaderName, it.url)
+            }
+        }
+
+        btnPlayerSpeed.setOnClickListener {
+            showSpeedSelector()
+        }
+
+        btnPlayerQuality.setOnClickListener {
+            showQualitySelector()
+        }
+
         btnSubsLogin.setOnClickListener {
             openLoginActivity()
         }
 
-        // History Clear
         btnClearHistory.setOnClickListener {
             HistoryManager.clearHistory(this)
             loadHistoryList()
             Toast.makeText(this, "Đã xóa toàn bộ lịch sử xem", Toast.LENGTH_SHORT).show()
         }
 
-        // Profile Login / Logout button
         btnProfileGoogleLogin.setOnClickListener {
             if (AccountManager.isLoggedIn(this)) {
                 AccountManager.logout(this)
@@ -255,8 +369,58 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initExoPlayer() {
-        exoPlayer = ExoPlayer.Builder(this).build()
+        val httpSource = DefaultHttpDataSource.Factory()
+            .setUserAgent(DownloaderImpl.USER_AGENT)
+            .setAllowCrossProtocolRedirects(true)
+            .setConnectTimeoutMs(15000)
+            .setReadTimeoutMs(15000)
+
+        val mediaSourceFactory = DefaultMediaSourceFactory(httpSource)
+        exoPlayer = ExoPlayer.Builder(this)
+            .setMediaSourceFactory(mediaSourceFactory)
+            .build()
+
         playerView.player = exoPlayer
+    }
+
+    private fun setupPlayerGestures() {
+        val gestureHelper = PlayerGestureHelper(
+            activity = this,
+            exoPlayer = { exoPlayer },
+            hudVolume = hudVolume,
+            txtVolumePercent = txtVolumePercent,
+            progressVolume = progressVolume,
+            hudBrightness = hudBrightness,
+            txtBrightnessPercent = txtBrightnessPercent,
+            progressBrightness = progressBrightness,
+            hudSeek = hudSeek,
+            txtSeekText = txtSeekText
+        )
+        playerView.setOnTouchListener(gestureHelper)
+    }
+
+    private fun showSpeedSelector() {
+        val speeds = arrayOf("0.5x", "0.75x", "1.0x (Bình thường)", "1.25x", "1.5x", "2.0x")
+        val values = floatArrayOf(0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f)
+        AlertDialog.Builder(this)
+            .setTitle("Tốc độ phát lại")
+            .setItems(speeds) { _, which ->
+                val chosenSpeed = values[which]
+                exoPlayer?.playbackParameters = PlaybackParameters(chosenSpeed)
+                btnPlayerSpeed.text = "${chosenSpeed}x"
+            }
+            .show()
+    }
+
+    private fun showQualitySelector() {
+        val qualities = arrayOf("Tự động (Khuyên dùng)", "1080p (FHD)", "720p (HD)", "480p", "360p")
+        AlertDialog.Builder(this)
+            .setTitle("Chất lượng video")
+            .setItems(qualities) { _, which ->
+                btnPlayerQuality.text = qualities[which].split(" ")[0]
+                Toast.makeText(this, "Đã áp dụng chất lượng: ${qualities[which]}", Toast.LENGTH_SHORT).show()
+            }
+            .show()
     }
 
     private fun setupBottomNavigation() {
@@ -271,17 +435,14 @@ class MainActivity : AppCompatActivity() {
         currentTabIndex = tabIndex
         hideKeyboard()
 
-        // Toggle Content Visibility
         tabContentHome.visibility = if (tabIndex == 0) View.VISIBLE else View.GONE
         tabContentShorts.visibility = if (tabIndex == 1) View.VISIBLE else View.GONE
         tabContentSubscriptions.visibility = if (tabIndex == 2) View.VISIBLE else View.GONE
         tabContentLibrary.visibility = if (tabIndex == 3) View.VISIBLE else View.GONE
         tabContentProfile.visibility = if (tabIndex == 4) View.VISIBLE else View.GONE
 
-        // Chips only visible on Home tab
         chipsScrollView.visibility = if (tabIndex == 0) View.VISIBLE else View.GONE
 
-        // Update Bottom Nav Colors (Active: Cyan #00F2FE, Inactive: #71717A)
         val activeColor = ContextCompat.getColor(this, R.color.active_accent)
         val inactiveColor = ContextCompat.getColor(this, R.color.inactive_nav)
 
@@ -305,7 +466,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Lazy load tab data
         when (tabIndex) {
             1 -> loadShortsFeed()
             2 -> loadSubscriptionsFeed()
@@ -388,7 +548,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadHomeFeed(keyword: String) {
-        showStatus("ĐANG TẢI DỮ LIỆU ĐỀ XUẤT...")
+        showStatus("ĐANG NẠP VIDEO ĐỀ XUẤT...")
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val service = ServiceList.YouTube
@@ -445,11 +605,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadShortsFeed() {
-        showStatus("ĐANG NẠP SHORTS THỊNH HÀNH...")
+        showStatus("ĐANG NẠP SHORTS...")
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val service = ServiceList.YouTube
-                val search = service.getSearchExtractor("#shorts việt nam")
+                val search = service.getSearchExtractor("#shorts việt nam hot")
                 search.fetchPage()
                 val list = search.initialPage.items
                     .filterIsInstance<StreamInfoItem>()
@@ -457,7 +617,7 @@ class MainActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main) {
                     hideStatus()
-                    shortsAdapter.updateData(list)
+                    shortsPagerAdapter.updateData(list)
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
@@ -470,49 +630,64 @@ class MainActivity : AppCompatActivity() {
     private fun loadSubscriptionsFeed() {
         if (!AccountManager.isLoggedIn(this)) {
             cardSubsNotLoggedIn.visibility = View.VISIBLE
-            recyclerViewSubs.visibility = View.GONE
+            layoutLoggedInSubs.visibility = View.GONE
             hideStatus()
             return
         }
 
         cardSubsNotLoggedIn.visibility = View.GONE
-        recyclerViewSubs.visibility = View.VISIBLE
+        layoutLoggedInSubs.visibility = View.VISIBLE
         showStatus("ĐANG ĐỒNG BỘ KÊNH ĐĂNG KÝ...")
 
         lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val service = ServiceList.YouTube
-                // Sử dụng subscription feed với cookie đã nạp trong DownloaderImpl
-                val subExtractor = service.getFeedExtractor("https://www.youtube.com/feed/subscriptions")
-                subExtractor.fetchPage()
-                val list = subExtractor.initialPage.items
-                    .filterIsInstance<StreamInfoItem>()
-                    .map { mapToItem(it) }
+            // 1. Đồng bộ danh sách kênh đăng ký
+            val channels = YouTubeSyncManager.fetchSubscribedChannels(this@MainActivity)
 
-                withContext(Dispatchers.Main) {
-                    hideStatus()
-                    subsAdapter.updateData(list)
+            // 2. Đồng bộ feed video mới nhất
+            val videos = YouTubeSyncManager.fetchSubscriptionFeed(this@MainActivity)
+
+            withContext(Dispatchers.Main) {
+                hideStatus()
+                if (channels.isNotEmpty()) {
+                    subChannelsAdapter.updateData(channels)
                 }
-            } catch (e: Exception) {
-                // Fallback nếu YouTube cấu trúc feed subscriptions đổi
-                withContext(Dispatchers.Main) {
-                    hideStatus()
-                    Toast.makeText(this@MainActivity, "Đã kết nối tài khoản. Đang tải video đề xuất...", Toast.LENGTH_SHORT).show()
-                    loadHomeFeed("tất cả")
+                if (videos.isNotEmpty()) {
+                    subsAdapter.updateData(videos)
+                } else {
+                    // Fallback nếu YouTube trả feed rỗng
+                    loadHomeFeed("kênh đăng ký")
                 }
             }
         }
     }
 
     private fun loadHistoryList() {
-        val historyList = HistoryManager.getHistory(this)
-        if (historyList.isEmpty()) {
+        val localHistory = HistoryManager.getHistory(this).toMutableList()
+        if (AccountManager.isLoggedIn(this)) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val remoteHistory = YouTubeSyncManager.fetchWatchHistory(this@MainActivity)
+                withContext(Dispatchers.Main) {
+                    if (remoteHistory.isNotEmpty()) {
+                        val combined = (localHistory + remoteHistory).distinctBy { it.url }
+                        updateHistoryView(combined)
+                    } else {
+                        updateHistoryView(localHistory)
+                    }
+                }
+            }
+        } else {
+            updateHistoryView(localHistory)
+        }
+    }
+
+    private fun updateHistoryView(list: List<VideoItem>) {
+        if (list.isEmpty()) {
             txtEmptyHistory.visibility = View.VISIBLE
             recyclerViewHistory.visibility = View.GONE
         } else {
             txtEmptyHistory.visibility = View.GONE
             recyclerViewHistory.visibility = View.VISIBLE
-            historyAdapter.updateData(historyList)
+            historyAdapter.updateData(list)
         }
     }
 
@@ -536,49 +711,66 @@ class MainActivity : AppCompatActivity() {
         loginLauncher.launch(intent)
     }
 
+    private fun openChannel(uploaderName: String, videoUrl: String) {
+        val intent = Intent(this, ChannelActivity::class.java).apply {
+            putExtra(ChannelActivity.EXTRA_CHANNEL_NAME, uploaderName)
+            putExtra(ChannelActivity.EXTRA_CHANNEL_URL, videoUrl)
+        }
+        startActivity(intent)
+    }
+
     private fun playVideo(item: VideoItem) {
         hideKeyboard()
+        currentPlayingItem = item
+        currentPlayingUrl = item.url
         HistoryManager.addHistory(this, item)
+
         txtCurrentPlayingTitle.text = item.title
+        txtCurrentPlayingChannel.text = "Kênh: ${item.uploaderName} • Chạm để xem hồ sơ"
+        txtMiniPlayerTitle.text = item.title
+        txtMiniPlayerChannel.text = item.uploaderName
+
+        miniPlayerSection.visibility = View.GONE
         playerSection.visibility = View.VISIBLE
-        showStatus("ĐANG KẾT NỐI LUỒNG PHÁT SẠCH...")
+        showStatus("ĐANG KẾT NỐI LUỒNG PHÁT (HỖ TRỢ LIVESTREAM)...")
+
+        PlaybackService.start(this, item.title, item.uploaderName)
 
         lifecycleScope.launch(Dispatchers.IO) {
-            var streamUrl: String? = null
             try {
                 val service = ServiceList.YouTube
                 val streamInfo = try {
                     StreamInfo.getInfo(service, item.url)
                 } catch (e: Exception) {
-                    // Retry một lần nếu gặp reload glitch
                     StreamInfo.getInfo(service, item.url)
                 }
 
-                // 1. Luồng HLS thích ứng đa độ phân giải
+                // Xử lý luồng HLS cho Livestream và video thông thường
                 val hlsUrl = streamInfo.hlsUrl
-                if (!hlsUrl.isNullOrEmpty()) {
-                    streamUrl = hlsUrl
+                val mediaItem = if (!hlsUrl.isNullOrEmpty()) {
+                    MediaItem.Builder()
+                        .setUri(hlsUrl)
+                        .setMimeType(MimeTypes.APPLICATION_M3U8)
+                        .build()
                 } else {
-                    // 2. Luồng MP4 progressive (Video + Audio)
-                    val combined = streamInfo.videoStreams
+                    val progressive = streamInfo.videoStreams
                         .filter { !it.isVideoOnly }
                         .maxByOrNull { it.resolution.filter { c -> c.isDigit() }.toIntOrNull() ?: 0 }
 
-                    streamUrl = combined?.content
+                    val uri = progressive?.content
                         ?: streamInfo.videoStreams.firstOrNull()?.content
                         ?: streamInfo.videoOnlyStreams.firstOrNull()?.content
+                        ?: ""
+
+                    MediaItem.fromUri(uri)
                 }
 
                 withContext(Dispatchers.Main) {
-                    if (!streamUrl.isNullOrEmpty()) {
-                        hideStatus()
-                        exoPlayer?.let { player ->
-                            player.setMediaItem(MediaItem.fromUri(streamUrl))
-                            player.prepare()
-                            player.play()
-                        }
-                    } else {
-                        showStatus("KHÔNG TÌM THẤY LUỒNG PHÁT TƯƠNG THÍCH.")
+                    hideStatus()
+                    exoPlayer?.let { player ->
+                        player.setMediaItem(mediaItem)
+                        player.prepare()
+                        player.play()
                     }
                 }
             } catch (e: Exception) {
@@ -589,12 +781,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun stopPlayback() {
+        exoPlayer?.stop()
+        playerSection.visibility = View.GONE
+        miniPlayerSection.visibility = View.GONE
+        PlaybackService.stop(this)
+    }
+
     private fun mapToItem(item: StreamInfoItem): VideoItem {
         val durationFormatted = if (item.duration > 0) {
             val minutes = item.duration / 60
             val seconds = item.duration % 60
             String.format("%02d:%02d", minutes, seconds)
-        } else ""
+        } else "TRỰC TIẾP"
 
         return VideoItem(
             url = item.url,
@@ -628,6 +827,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        stopPlayback()
         exoPlayer?.release()
         exoPlayer = null
     }

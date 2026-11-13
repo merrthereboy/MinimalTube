@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>A modern, distraction-free YouTube client for Android engineered with luxury minimalist dark mode and zero ads.</strong>
+  <strong>A modern, distraction-free YouTube client for Android engineered with luxury minimalist dark mode, gesture controls, and zero ads.</strong>
 </p>
 
 <p align="center">
@@ -29,26 +29,26 @@
 - **15% Surfaces & Typography:** Secondary card surfaces (`#18181F`) with pure white headers (`#FFFFFF`) and muted slate subtitles (`#A1A1AA`).
 - **5% Brand Gradient Accents:** Smooth spectrum transition from `#00F2FE` (Cyan) &rarr; `#2472FC` (Blue) &rarr; `#7928CA` (Violet) &rarr; `#FF2E93` (Magenta) &rarr; `#FFBE98` (Peach) for active indicators and primary interactions.
 
-The core extraction pipeline is powered by the latest [NewPipeExtractor](https://github.com/TeamNewPipe/NewPipeExtractor) (`v0.27.1`), ensuring direct stream parsing without dependency on proprietary Google Play Services.
-
 ---
 
-## Key Features
+## Key Features (v1.2.0 Pro)
 
-- **100% Ad-Free Playback:** Stream videos directly without pre-roll ads, mid-rolls, or sponsored banners.
-- **5-Tab Navigation:**
-  1. **TRANG CHỦ (Home):** Filtered topics (All, Live, Music, Gaming, News, Tech, Trending) with responsive video cards.
-  2. **SHORTS:** Clean portrait feed for YouTube Shorts.
-  3. **FANS ZONE (Subscriptions):** Channel updates synced directly with your YouTube account.
-  4. **VIDEO CỦA TÔI (Library):** Local watch history, liked videos, and playlists.
-  5. **TÔI (Account & Profile):** Google account integration, session status, and configuration.
-- **Google / YouTube Account Synchronization:**
-  - Securely sign in to your Google Account via the built-in browser engine.
-  - Sync subscribed channels, feed updates, and watch history directly to your device.
-  - Zero external servers: Authentication cookies remain strictly on your local device.
-- **Hardware-Accelerated ExoPlayer:** Low-latency playback with dynamic HLS adaptation and progressive MP4 fallback.
-- **Persistent Signing Keystore:** Builds are signed with a unified keystore, allowing you to update the app directly over existing versions without uninstallation or signature mismatch errors.
-- **Minimalist Vector Design:** Clean line art vectors with rounded cards (16dp). Zero cartoon emojis.
+- **100% Ad-Free Video Playback:** Zero pre-roll ads, mid-rolls, or sponsored interruptions.
+- **YouTube-Grade Player Gestures & HUD:**
+  - Swipe up/down on the right side to adjust **Volume** with visual HUD.
+  - Swipe up/down on the left side to adjust **Brightness** with visual HUD.
+  - Double-tap right to **seek forward 10s** (`+10s`), double-tap left to **seek backward 10s** (`-10s`).
+  - Speed selector (0.5x, 0.75x, 1.0x, 1.25x, 1.5x, 2.0x) and quality switcher (1080p, 720p, 480p, 360p, Auto).
+- **Livestream Playback Support:** Native HLS (`m3u8`) streaming with ExoPlayer HttpDataSource integration.
+- **Docked Mini-Player:** Minimize the player to continue listening while browsing other tabs or videos.
+- **Background Playback (Audio Service):** Keep listening to music or podcasts with screen off via Android Foreground Service.
+- **Real YouTube Comments Drawer:** View real-time YouTube comments, like counts, and author avatars.
+- **Dedicated Channel Profile Pages:** Tap any channel name or avatar to view channel banner, subscribers, and full video catalog.
+- **Deep Account Synchronization:**
+  - Secure Google sign-in preserving session cookies locally.
+  - Syncs your exact subscribed channels (with horizontal avatar carousel) and subscription feeds.
+- **Smooth Vertical Shorts (ViewPager2):** Full-screen portrait Shorts player with seamless vertical swiping.
+- **Persistent Signing Keystore:** Updates can be installed directly over existing versions without uninstallation.
 
 ---
 
@@ -56,24 +56,7 @@ The core extraction pipeline is powered by the latest [NewPipeExtractor](https:/
 
 Download the official pre-compiled APK binary directly from GitHub:
 
-👉 **[Download MinimalTube v1.1.0 APK](https://github.com/merrthereboy/MinimalTube/releases/latest)**
-
-### Quick Installation:
-1. Download `MinimalTube-v1.1.0.apk` onto your Android phone (Android 7.0 / API 24 or newer).
-2. Tap the APK to install. If prompted, enable **"Install unknown apps"** in your settings.
-3. Open MinimalTube and enjoy clean, instant video playback!
-
----
-
-## Tech Stack
-
-- **Platform:** Android SDK 34 (Android 7.0+ compatibility)
-- **Language:** Kotlin 1.9 / JVM 17
-- **Media Engine:** AndroidX Media3 ExoPlayer (`1.2.1`) with HLS & DASH extensions
-- **Stream Parser:** [NewPipeExtractor](https://github.com/TeamNewPipe/NewPipeExtractor) `v0.27.1`
-- **Networking:** Square OkHttp `4.12.0`
-- **Image Caching:** Coil `2.5.0`
-- **CI/CD:** Automated GitHub Actions build pipeline
+👉 **[Download MinimalTube v1.2.0 APK](https://github.com/merrthereboy/MinimalTube/releases/latest)**
 
 ---
 

@@ -139,7 +139,7 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <!-- Search Input Area (Pill Design) -->
+    <!-- Search Input Area -->
     <LinearLayout
         android:id="@+id/searchContainer"
         android:layout_width="match_parent"
@@ -177,7 +177,7 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Embedded Floating/Docked Player View Section -->
+    <!-- Full Video Player Section with Gestures & HUD -->
     <LinearLayout
         android:id="@+id/playerSection"
         android:layout_width="match_parent"
@@ -189,22 +189,148 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="215dp"
+            android:layout_height="220dp"
             app:cardBackgroundColor="@color/card_surface"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp">
 
-            <!-- TextureView không có android:background để hiển thị hình ảnh hoàn hảo -->
-            <androidx.media3.ui.PlayerView
-                android:id="@+id/playerView"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:resize_mode="fit"
-                app:show_buffering="when_playing"
-                app:surface_type="texture_view"
-                app:use_controller="true" />
+                android:layout_height="match_parent">
+
+                <!-- Player View (TextureView with NO background for crisp video playback) -->
+                <androidx.media3.ui.PlayerView
+                    android:id="@+id/playerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:resize_mode="fit"
+                    app:show_buffering="when_playing"
+                    app:surface_type="texture_view"
+                    app:use_controller="true" />
+
+                <!-- Volume Gesture HUD Overlay -->
+                <LinearLayout
+                    android:id="@+id/hudVolume"
+                    android:layout_width="140dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_card_surface"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="10dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/txtVolumePercent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Âm lượng: 50%"
+                        android:textColor="@color/text_white"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <ProgressBar
+                        android:id="@+id/progressVolume"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:layout_marginTop="4dp"
+                        android:max="100"
+                        android:progress="50"
+                        android:progressTint="@color/active_accent" />
+                </LinearLayout>
+
+                <!-- Brightness Gesture HUD Overlay -->
+                <LinearLayout
+                    android:id="@+id/hudBrightness"
+                    android:layout_width="140dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_card_surface"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="10dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/txtBrightnessPercent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Độ sáng: 50%"
+                        android:textColor="@color/text_white"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBrightness"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:layout_marginTop="4dp"
+                        android:max="100"
+                        android:progress="50"
+                        android:progressTint="@color/accent_peach" />
+                </LinearLayout>
+
+                <!-- Double Tap Seek HUD Overlay -->
+                <LinearLayout
+                    android:id="@+id/hudSeek"
+                    android:layout_width="130dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_card_surface"
+                    android:gravity="center"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/txtSeekText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+10 giây ▶▶"
+                        android:textColor="@color/text_white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Top Corner Controls (Quality & Minimize) -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|end"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <!-- Quality Selector Button -->
+                    <TextView
+                        android:id="@+id/btnPlayerQuality"
+                        android:layout_width="wrap_content"
+                        android:layout_height="26dp"
+                        android:background="@drawable/bg_pill_chip_inactive"
+                        android:gravity="center"
+                        android:paddingHorizontal="8dp"
+                        android:text="1080p"
+                        android:textColor="@color/text_white"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <!-- Speed Selector Button -->
+                    <TextView
+                        android:id="@+id/btnPlayerSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="26dp"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_pill_chip_inactive"
+                        android:gravity="center"
+                        android:paddingHorizontal="8dp"
+                        android:text="1.0x"
+                        android:textColor="@color/text_white"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </FrameLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- Player Controls & Action Bar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -212,22 +338,65 @@
             android:orientation="horizontal"
             android:paddingTop="8dp">
 
-            <TextView
-                android:id="@+id/txtCurrentPlayingTitle"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="@color/text_title"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/txtCurrentPlayingTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/text_title"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtCurrentPlayingChannel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textColor="@color/active_accent"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <!-- Nút Mở Bình Luận -->
+            <TextView
+                android:id="@+id/btnOpenComments"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_button_pill_secondary"
+                android:gravity="center"
+                android:paddingHorizontal="10dp"
+                android:text="💬 Bình luận"
+                android:textColor="@color/text_sub"
+                android:textSize="10sp" />
+
+            <!-- Nút Thu nhỏ Miniplayer -->
+            <ImageView
+                android:id="@+id/btnMinimizePlayer"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="6dp"
+                android:src="@drawable/ic_shorts"
+                app:tint="@color/text_sub" />
+
+            <!-- Nút Đóng Trình Phát -->
             <ImageView
                 android:id="@+id/btnClosePlayer"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
@@ -235,6 +404,72 @@
                 android:src="@drawable/ic_close_clean"
                 app:tint="@color/text_sub" />
         </LinearLayout>
+    </LinearLayout>
+
+    <!-- Docked Mini-Player Bar (when minimized) -->
+    <LinearLayout
+        android:id="@+id/miniPlayerSection"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/bg_card_surface"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_shorts"
+            app:tint="@color/active_accent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtMiniPlayerTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/text_title"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtMiniPlayerChannel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_sub"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnMiniPlayerPlayPause"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="6dp"
+            android:src="@drawable/ic_shorts"
+            app:tint="@color/text_white" />
+
+        <ImageView
+            android:id="@+id/btnMiniPlayerClose"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="6dp"
+            android:src="@drawable/ic_close_clean"
+            app:tint="@color/text_sub" />
     </LinearLayout>
 
     <!-- Status / Loading Notification -->
@@ -274,32 +509,19 @@
                 android:paddingBottom="20dp" />
         </LinearLayout>
 
-        <!-- TAB 2: SHORTS -->
-        <LinearLayout
+        <!-- TAB 2: SHORTS (Vertical ViewPager2) -->
+        <FrameLayout
             android:id="@+id/tabContentShorts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:visibility="gone">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="8dp"
-                android:text="SHORTS ĐỀ XUẤT"
-                android:textColor="@color/text_title"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewShorts"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPagerShorts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingHorizontal="14dp"
-                android:paddingBottom="20dp" />
-        </LinearLayout>
+                android:orientation="vertical" />
+        </FrameLayout>
 
         <!-- TAB 3: FANS ZONE (KÊNH ĐĂNG KÝ) -->
         <LinearLayout
@@ -340,11 +562,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:gravity="center"
-                    android:text="Đăng nhập tài khoản Google để đồng bộ toàn bộ kênh đăng ký YouTube và xem cập nhật mới nhất từ các nhà sáng tạo yêu thích."
+                    android:text="Đăng nhập Google để đồng bộ toàn bộ kênh đăng ký YouTube và xem cập nhật mới nhất từ các nhà sáng tạo yêu thích."
                     android:textColor="@color/text_sub"
                     android:textSize="11sp" />
 
-                <!-- Nút Đăng nhập Google với Brand Gradient -->
                 <LinearLayout
                     android:id="@+id/btnSubsLogin"
                     android:layout_width="match_parent"
@@ -372,15 +593,31 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Danh sách video kênh đăng ký -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewSubs"
+            <!-- Khi Đã Đăng Nhập: Hàng avatar kênh cuộn ngang + Danh sách video -->
+            <LinearLayout
+                android:id="@+id/layoutLoggedInSubs"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingHorizontal="14dp"
-                android:paddingBottom="20dp"
-                android:visibility="gone" />
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewSubChannels"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="6dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewSubs"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="14dp"
+                    android:paddingBottom="20dp" />
+            </LinearLayout>
         </LinearLayout>
 
         <!-- TAB 4: VIDEO CỦA TÔI (THƯ VIỆN & LỊCH SỬ) -->
@@ -396,7 +633,6 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Header Lịch sử -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -448,7 +684,6 @@
                     android:layout_marginTop="8dp"
                     android:nestedScrollingEnabled="false" />
 
-                <!-- Danh sách phát & Yêu thích -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -518,7 +753,6 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Profile Card -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -560,7 +794,6 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- Nút Đăng nhập / Đăng xuất Google -->
                 <LinearLayout
                     android:id="@+id/btnProfileGoogleLogin"
                     android:layout_width="match_parent"
@@ -588,7 +821,6 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- Quick Stats Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -648,7 +880,6 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- Cài đặt & Về ứng dụng -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -678,7 +909,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Phiên bản: v1.1.0 Stable (Tự động cập nhật)"
+                        android:text="Phiên bản: v1.2.0 Pro Edition"
                         android:textColor="@color/text_sub"
                         android:textSize="11sp" />
 
@@ -712,7 +943,6 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <!-- Tab 1: Trang chủ -->
         <LinearLayout
             android:id="@+id/navHome"
             android:layout_width="0dp"
@@ -742,7 +972,6 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Tab 2: Shorts -->
         <LinearLayout
             android:id="@+id/navShorts"
             android:layout_width="0dp"
@@ -771,7 +1000,6 @@
                 android:textSize="9sp" />
         </LinearLayout>
 
-        <!-- Tab 3: Fans Zone (Kênh đăng ký) -->
         <LinearLayout
             android:id="@+id/navSubs"
             android:layout_width="0dp"
@@ -800,7 +1028,6 @@
                 android:textSize="9sp" />
         </LinearLayout>
 
-        <!-- Tab 4: Video Của Tôi (Thư viện) -->
         <LinearLayout
             android:id="@+id/navLibrary"
             android:layout_width="0dp"
@@ -829,7 +1056,6 @@
                 android:textSize="9sp" />
         </LinearLayout>
 
-        <!-- Tab 5: Tôi (Cá nhân) -->
         <LinearLayout
             android:id="@+id/navProfile"
             android:layout_width="0dp"

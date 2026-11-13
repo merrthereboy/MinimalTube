@@ -13,7 +13,8 @@ class VideoAdapter(
     private val items: MutableList<VideoItem> = mutableListOf(),
     private val onPlayClick: (VideoItem) -> Unit,
     private val onDownloadClick: (VideoItem) -> Unit = {},
-    private val onSaveClick: (VideoItem) -> Unit = {}
+    private val onSaveClick: (VideoItem) -> Unit = {},
+    private val onChannelClick: (VideoItem) -> Unit = {}
 ) : RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
 
     fun updateData(newItems: List<VideoItem>) {
@@ -49,6 +50,7 @@ class VideoAdapter(
             val formattedViews = formatViews(item.viewCount)
             val dateStr = if (item.uploadDate.isNotEmpty()) " • ${item.uploadDate}" else ""
             txtMeta.text = "${item.uploaderName} • $formattedViews$dateStr"
+            txtMeta.setOnClickListener { onChannelClick(item) }
 
             if (item.durationText.isNotEmpty()) {
                 txtDurationBadge.text = item.durationText

@@ -32,21 +32,21 @@ jobs:
 
     - name: Prepare APK Release Artifact
       run: |
-        cp app/build/outputs/apk/release/app-release.apk MinimalTube-v1.1.0.apk
+        cp app/build/outputs/apk/release/app-release.apk MinimalTube-v1.2.0.apk
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: MinimalTube-v1.1.0-APK
-        path: MinimalTube-v1.1.0.apk
+        name: MinimalTube-v1.2.0-APK
+        path: MinimalTube-v1.2.0.apk
 
-    - name: Publish GitHub Release v1.1.0
+    - name: Publish GitHub Release v1.2.0
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: v1.1.0
-        name: MinimalTube v1.1.0 (Luxury Dark & Account Sync)
+        tag_name: v1.2.0
+        name: MinimalTube v1.2.0 Pro (Gestures, Livestream, Comments & Deep Sync)
         body_path: RELEASE_NOTES.md
-        files: MinimalTube-v1.1.0.apk
+        files: MinimalTube-v1.2.0.apk
         draft: false
         prerelease: false
       env:

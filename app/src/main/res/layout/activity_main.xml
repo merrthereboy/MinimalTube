@@ -113,29 +113,31 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Embedded Player View Section (Rounded Luxury Card) -->
+    <!-- Embedded Player View Section (TextureView with Rounded Corners) -->
     <LinearLayout
         android:id="@+id/playerSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="16dp"
+        android:paddingHorizontal="14dp"
         android:paddingBottom="12dp"
         android:visibility="gone">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            app:cardBackgroundColor="@color/bg_dark"
+            app:cardBackgroundColor="@color/card_surface"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp">
 
+            <!-- Lưu ý quan trọng: Dùng texture_view và KHÔNG gán android:background để hiển thị video mượt mà không bị đen màn hình -->
             <androidx.media3.ui.PlayerView
                 android:id="@+id/playerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/bg_dark"
                 app:resize_mode="fit"
+                app:show_buffering="when_playing"
+                app:surface_type="texture_view"
                 app:use_controller="true" />
         </androidx.cardview.widget.CardView>
 

@@ -1,8 +1,10 @@
 package com.minimal.tube
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -90,12 +92,14 @@ class MainActivity : AppCompatActivity() {
         tabHome.setOnClickListener {
             setActivePillTab(tabHome)
             searchContainer.visibility = View.GONE
+            hideKeyboard()
             loadTrendingVideos(isTrendingTab = false)
         }
 
         tabTrending.setOnClickListener {
             setActivePillTab(tabTrending)
             searchContainer.visibility = View.GONE
+            hideKeyboard()
             loadTrendingVideos(isTrendingTab = true)
         }
 
@@ -103,15 +107,18 @@ class MainActivity : AppCompatActivity() {
             setActivePillTab(tabSearchToggle)
             if (searchContainer.visibility == View.VISIBLE) {
                 searchContainer.visibility = View.GONE
+                hideKeyboard()
             } else {
                 searchContainer.visibility = View.VISIBLE
                 edtSearchQuery.requestFocus()
+                showKeyboard()
             }
         }
 
         btnDoSearch.setOnClickListener {
             val query = edtSearchQuery.text.toString().trim()
             if (query.isNotEmpty()) {
+                hideKeyboard()
                 searchVideos(query)
             }
         }
@@ -120,6 +127,7 @@ class MainActivity : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val query = edtSearchQuery.text.toString().trim()
                 if (query.isNotEmpty()) {
+                    hideKeyboard()
                     searchVideos(query)
                 }
                 true
@@ -156,7 +164,6 @@ class MainActivity : AppCompatActivity() {
             try {
                 val service = ServiceList.YouTube
                 
-                // Thử tải qua Kiosk; nếu YouTube đổi cấu trúc thẻ, chuyển sang tìm kiếm thịnh hành làm fallback
                 val videoList = try {
                     val kiosk = service.kioskList.defaultKioskExtractor
                     kiosk.fetchPage()
@@ -205,23 +212,31 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun playVideo(item: VideoItem) {
+        hideKeyboard()
         txtCurrentPlayingTitle.text = item.title
         playerSection.visibility = View.VISIBLE
         showStatus("ĐANG KẾT NỐI LUỒNG PHÁT SẠCH...")
+        recyclerViewVideos.smoothScrollToPosition(0)
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val service = ServiceList.YouTube
                 val streamInfo = StreamInfo.getInfo(service, item.url)
 
-                // Tìm luồng phát phù hợp nhất (ưu tiên luồng tích hợp cả hình và tiếng, hoặc luồng tốt nhất)
-                val videoStream = streamInfo.videoStreams
-                    .filter { !it.isVideoOnly }
-                    .maxByOrNull { it.resolution.filter { c -> c.isDigit() }.toIntOrNull() ?: 0 }
-                    ?: streamInfo.videoStreams.firstOrNull()
-                    ?: streamInfo.videoOnlyStreams.firstOrNull()
+                // 1. Ưu tiên luồng HLS nếu có (chuẩn stream đa độ phân giải mượt nhất)
+                val hlsUrl = streamInfo.hlsUrl
+                val streamUrl = if (!hlsUrl.isNullOrEmpty()) {
+                    hlsUrl
+                } else {
+                    // 2. Tìm luồng MP4 progressive kết hợp đầy đủ hình và tiếng
+                    val combined = streamInfo.videoStreams
+                        .filter { !it.isVideoOnly }
+                        .maxByOrNull { it.resolution.filter { c -> c.isDigit() }.toIntOrNull() ?: 0 }
 
-                val streamUrl = videoStream?.content
+                    combined?.content 
+                        ?: streamInfo.videoStreams.firstOrNull()?.content
+                        ?: streamInfo.videoOnlyStreams.firstOrNull()?.content
+                }
 
                 if (!streamUrl.isNullOrEmpty()) {
                     withContext(Dispatchers.Main) {
@@ -254,6 +269,16 @@ class MainActivity : AppCompatActivity() {
             uploadDate = item.textualUploadDate.orEmpty(),
             thumbnailUrl = item.thumbnails.firstOrNull()?.url
         )
+    }
+
+    private fun hideKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.hideSoftInputFromWindow(currentFocus?.windowToken ?: window.decorView.windowToken, 0)
+    }
+
+    private fun showKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.showSoftInput(edtSearchQuery, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun showStatus(msg: String) {

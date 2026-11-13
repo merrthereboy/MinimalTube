@@ -7,18 +7,31 @@ android {
     namespace 'com.minimal.tube'
     compileSdk 34
 
+    signingConfigs {
+        release {
+            storeFile file("../keystore/release.keystore")
+            storePassword "minimaltube"
+            keyAlias "minimaltube"
+            keyPassword "minimaltube"
+        }
+    }
+
     defaultConfig {
         applicationId "com.minimal.tube"
         minSdk 24
         targetSdk 34
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+        }
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -43,14 +56,16 @@ dependencies {
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
 
-    // NewPipeExtractor phiên bản mới nhất v0.27.1 (khắc phục lỗi thay đổi thuật toán YouTube)
+    // NewPipeExtractor v0.27.1
     implementation 'com.github.TeamNewPipe:NewPipeExtractor:v0.27.1'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 
-    // ExoPlayer cho phát video sạch không quảng cáo
+    // ExoPlayer (Core + UI + HLS + DASH)
     implementation 'androidx.media3:media3-exoplayer:1.2.1'
+    implementation 'androidx.media3:media3-exoplayer-hls:1.2.1'
+    implementation 'androidx.media3:media3-exoplayer-dash:1.2.1'
     implementation 'androidx.media3:media3-ui:1.2.1'
 
-    // Coil để tải thumbnail mượt mà
+    // Coil Image loading
     implementation 'io.coil-kt:coil:2.5.0'
 }

@@ -85,35 +85,48 @@ class ChannelActivity : AppCompatActivity() {
         recyclerViewVideos.adapter = videoAdapter
 
         if (channelUrl.isNotEmpty()) {
-            loadChannelData(channelUrl)
+            loadChannelData(channelUrl, initialName)
         } else {
             txtStatus.text = "Không tìm thấy đường dẫn kênh hợp lệ."
         }
     }
 
-    private fun loadChannelData(url: String) {
+    private fun loadChannelData(url: String, fallbackName: String) {
         txtStatus.visibility = View.VISIBLE
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val service = ServiceList.YouTube
-                val extractor = service.getChannelExtractor(url)
-                extractor.fetchPage()
+                var channelName = fallbackName
+                var subCountText = ""
+                var avatarUrl: String? = null
+                var bannerUrl: String? = null
 
-                val name = extractor.name
-                val subCount = extractor.subscriberCount
-                val avatar = extractor.avatarUrl
-                val banner = extractor.bannerUrl
-                val videos = extractor.initialPage.items.filterIsInstance<StreamInfoItem>().map { item ->
+                try {
+                    val extractor = service.getChannelExtractor(url)
+                    extractor.fetchPage()
+                    channelName = extractor.name
+                    val subCount = extractor.subscriberCount
+                    subCountText = if (subCount > 0) "$subCount người đăng ký" else ""
+                    avatarUrl = extractor.avatars.firstOrNull()?.url
+                    bannerUrl = extractor.banners.firstOrNull()?.url
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+                // Tải danh sách video của kênh
+                val searchExtractor = service.getSearchExtractor(channelName)
+                searchExtractor.fetchPage()
+                val videos = searchExtractor.initialPage.items.filterIsInstance<StreamInfoItem>().map { item ->
                     val durationFormatted = if (item.duration > 0) {
                         val minutes = item.duration / 60
                         val seconds = item.duration % 60
                         String.format("%02d:%02d", minutes, seconds)
-                    } else ""
+                    } else "TRỰC TIẾP"
 
                     VideoItem(
                         url = item.url,
                         title = item.name,
-                        uploaderName = name,
+                        uploaderName = channelName,
                         viewCount = item.viewCount,
                         uploadDate = item.textualUploadDate.orEmpty(),
                         thumbnailUrl = item.thumbnails.firstOrNull()?.url,
@@ -123,14 +136,16 @@ class ChannelActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main) {
                     txtStatus.visibility = View.GONE
-                    txtName.text = name
-                    txtHeaderTitle.text = name
-                    txtSubCount.text = subCount
-                    if (!avatar.isNullOrEmpty()) {
-                        imgAvatar.load(avatar) { crossfade(true) }
+                    txtName.text = channelName
+                    txtHeaderTitle.text = channelName
+                    if (subCountText.isNotEmpty()) {
+                        txtSubCount.text = subCountText
                     }
-                    if (!banner.isNullOrEmpty()) {
-                        imgBanner.load(banner) { crossfade(true) }
+                    if (!avatarUrl.isNullOrEmpty()) {
+                        imgAvatar.load(avatarUrl) { crossfade(true) }
+                    }
+                    if (!bannerUrl.isNullOrEmpty()) {
+                        imgBanner.load(bannerUrl) { crossfade(true) }
                         imgBanner.visibility = View.VISIBLE
                     }
                     videoAdapter.updateData(videos)

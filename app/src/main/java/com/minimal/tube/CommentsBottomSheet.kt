@@ -55,10 +55,13 @@ class CommentsBottomSheet(
                 extractor.fetchPage()
 
                 val items = extractor.initialPage.items.filterIsInstance<CommentsInfoItem>().map {
+                    val avatar = it.uploaderAvatars.firstOrNull()?.url.orEmpty()
+                    val textContent = it.commentText?.content.orEmpty()
+
                     CommentModel(
-                        author = it.authorName.orEmpty(),
-                        avatarUrl = it.uploaderAvatarUrl.orEmpty(),
-                        text = it.commentText.orEmpty(),
+                        author = it.uploaderName.orEmpty(),
+                        avatarUrl = avatar,
+                        text = textContent,
                         likeCount = it.likeCount,
                         date = it.textualUploadDate.orEmpty()
                     )

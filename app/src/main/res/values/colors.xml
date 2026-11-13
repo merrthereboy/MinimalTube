@@ -10,6 +10,9 @@
     <color name="border_subtle">#262633</color>
     <color name="border_gray">#262633</color>
     <color name="border_active">#00F2FE</color>
+    <color name="card_border">#262633</color>
+    <color name="search_bg">#18181F</color>
+    <color name="search_border">#262633</color>
 
     <!-- Typography (15% Text) -->
     <color name="text_title">#FFFFFF</color>

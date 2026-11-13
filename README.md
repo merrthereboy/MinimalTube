@@ -1,17 +1,22 @@
 # MinimalTube
 
 <p align="center">
-  <strong>A minimalist, ad-free YouTube client for Android engineered with pure typography.</strong>
+  <img src="docs/logo_banner.png" alt="MinimalTube Banner" width="600" />
+</p>
+
+<p align="center">
+  <strong>A modern, distraction-free YouTube client for Android engineered with luxury minimalist dark mode and zero ads.</strong>
 </p>
 
 <p align="center">
   <a href="https://github.com/merrthereboy/MinimalTube/releases/latest">
-    <img src="https://img.shields.io/github/v/release/merrthereboy/MinimalTube?style=flat-square&color=white&label=Release" alt="Latest Release">
+    <img src="https://img.shields.io/github/v/release/merrthereboy/MinimalTube?style=flat-square&color=00F2FE&label=Release" alt="Latest Release">
   </a>
   <a href="https://github.com/merrthereboy/MinimalTube/actions/workflows/build-apk.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/merrthereboy/MinimalTube/build-apk.yml?style=flat-square&label=Build" alt="Build Status">
   </a>
   <img src="https://img.shields.io/badge/Platform-Android%207.0%2B-black?style=flat-square" alt="Android Version">
+  <img src="https://img.shields.io/badge/Signature-Persistent%20Keystore-blue?style=flat-square" alt="Keystore Signature">
   <img src="https://img.shields.io/badge/License-GPL--3.0-gray?style=flat-square" alt="License">
 </p>
 
@@ -19,86 +24,75 @@
 
 ## Overview
 
-**MinimalTube** is an open-source, privacy-first Android application designed for users who seek a distraction-free video viewing experience. Unlike conventional media clients that clutter the screen with animations, cartoon icons, and algorithmic distractions, MinimalTube strips away all decorative visuals in favor of a clean, high-contrast typography interface.
+**MinimalTube** is an open-source, privacy-focused Android application crafted for users who demand a clean, elegant, and ad-free YouTube experience. Instead of noisy algorithms, cluttering popups, and intrusive banners, MinimalTube features a tailored **Luxury Dark Mode** interface adhering strictly to an 80/15/5 visual hierarchy:
+- **80% Canvas:** Deep Obsidian Dark Background (`#0D0D11`).
+- **15% Surfaces & Typography:** Secondary card surfaces (`#18181F`) with pure white headers (`#FFFFFF`) and muted slate subtitles (`#A1A1AA`).
+- **5% Brand Gradient Accents:** Smooth spectrum transition from `#00F2FE` (Cyan) &rarr; `#2472FC` (Blue) &rarr; `#7928CA` (Violet) &rarr; `#FF2E93` (Magenta) &rarr; `#FFBE98` (Peach) for active indicators and primary interactions.
 
-The application leverages [NewPipeExtractor](https://github.com/TeamNewPipe/NewPipeExtractor) to parse media streams directly from YouTube servers without proprietary Google Play Services or user tracking.
+The core extraction pipeline is powered by the latest [NewPipeExtractor](https://github.com/TeamNewPipe/NewPipeExtractor) (`v0.27.1`), ensuring direct stream parsing without dependency on proprietary Google Play Services.
 
 ---
 
 ## Key Features
 
-- **Strictly Ad-Free Playback:** Bypasses video advertisements, sponsored banners, and tracking telemetry by streaming direct media links.
-- **Pure Typography Design (Zero Emojis, Zero Icons):** Every navigation element, status indicator, and interaction button is driven purely by clean text and minimalist geometric borders.
-- **AMOLED Deep Black Theme:** Fully native `#000000` canvas engineered to reduce eye fatigue and minimize battery consumption on OLED displays.
-- **Hardware-Accelerated Engine:** Integrates Google's `androidx.media3:media3-exoplayer` for low-latency streaming up to 1080p resolution.
-- **Privacy & Lightweight:** No Google login required, zero telemetry, and an ultra-compact APK size under 11 MB.
+- **100% Ad-Free Playback:** Stream videos directly without pre-roll ads, mid-rolls, or sponsored banners.
+- **5-Tab Navigation:**
+  1. **TRANG CHỦ (Home):** Filtered topics (All, Live, Music, Gaming, News, Tech, Trending) with responsive video cards.
+  2. **SHORTS:** Clean portrait feed for YouTube Shorts.
+  3. **FANS ZONE (Subscriptions):** Channel updates synced directly with your YouTube account.
+  4. **VIDEO CỦA TÔI (Library):** Local watch history, liked videos, and playlists.
+  5. **TÔI (Account & Profile):** Google account integration, session status, and configuration.
+- **Google / YouTube Account Synchronization:**
+  - Securely sign in to your Google Account via the built-in browser engine.
+  - Sync subscribed channels, feed updates, and watch history directly to your device.
+  - Zero external servers: Authentication cookies remain strictly on your local device.
+- **Hardware-Accelerated ExoPlayer:** Low-latency playback with dynamic HLS adaptation and progressive MP4 fallback.
+- **Persistent Signing Keystore:** Builds are signed with a unified keystore, allowing you to update the app directly over existing versions without uninstallation or signature mismatch errors.
+- **Minimalist Vector Design:** Clean line art vectors with rounded cards (16dp). Zero cartoon emojis.
 
 ---
 
-## Interface Concept
+## Download & Releases
 
-```
-[ TRANG CHỦ ]    [ XU HƯỚNG ]    [ TÌM KIẾM ]
-────────────────────────────────────────────────────────────
+Download the official pre-compiled APK binary directly from GitHub:
 
-┌──────────────────────────────────────────────────────────┐
-│                                                          │
-│                   VIDEO THUMBNAIL (16:9)                 │
-│                                                          │
-└──────────────────────────────────────────────────────────┘
-TIÊU ĐỀ VIDEO HIỂN THỊ RÕ RÀNG KHÔNG BIỂU TƯỢNG
-Kênh Đăng Tải • 1.2M Lượt xem • 2 ngày trước
+👉 **[Download MinimalTube v1.1.0 APK](https://github.com/merrthereboy/MinimalTube/releases/latest)**
 
-[ PHÁT ]    [ TẢI VỀ ]    [ LƯU ]
-────────────────────────────────────────────────────────────
-```
+### Quick Installation:
+1. Download `MinimalTube-v1.1.0.apk` onto your Android phone (Android 7.0 / API 24 or newer).
+2. Tap the APK to install. If prompted, enable **"Install unknown apps"** in your settings.
+3. Open MinimalTube and enjoy clean, instant video playback!
 
 ---
 
-## Download & Installation
+## Tech Stack
 
-The latest pre-compiled APK binary is available directly on the GitHub Releases page:
-
-👉 **[Download Latest APK (MinimalTube-v1.0.2.apk)](https://github.com/merrthereboy/MinimalTube/releases/latest)**
-
-### Installation Steps:
-1. Download the `.apk` file to your Android device (Android 7.0 / API 24 or newer).
-2. Open the downloaded file and grant permission for **"Install from unknown sources"** if prompted by your browser or file manager.
-3. Complete installation and launch MinimalTube.
-
----
-
-## Tech Stack & Architecture
-
-- **Language:** Kotlin 1.9
-- **Media Engine:** AndroidX Media3 ExoPlayer (`1.2.1`)
-- **Extraction Core:** [NewPipeExtractor](https://github.com/TeamNewPipe/NewPipeExtractor) (`v0.24.5`)
-- **HTTP Client:** Square OkHttp (`4.12.0`)
-- **Image Pipeline:** Coil (`2.5.0`)
-- **CI/CD Automation:** GitHub Actions (automated compilation & release pipeline)
+- **Platform:** Android SDK 34 (Android 7.0+ compatibility)
+- **Language:** Kotlin 1.9 / JVM 17
+- **Media Engine:** AndroidX Media3 ExoPlayer (`1.2.1`) with HLS & DASH extensions
+- **Stream Parser:** [NewPipeExtractor](https://github.com/TeamNewPipe/NewPipeExtractor) `v0.27.1`
+- **Networking:** Square OkHttp `4.12.0`
+- **Image Caching:** Coil `2.5.0`
+- **CI/CD:** Automated GitHub Actions build pipeline
 
 ---
 
 ## Building from Source
 
-### Prerequisites
-- JDK 17 or higher
-- Android SDK (API 34)
-
-### Build via Command Line
 ```bash
 # Clone the repository
 git clone https://github.com/merrthereboy/MinimalTube.git
 cd MinimalTube
 
-# Compile Debug APK
-./gradlew assembleDebug
+# Compile Release APK
+./gradlew assembleRelease
 ```
-The compiled output will be generated at:
-`app/build/outputs/apk/debug/app-debug.apk`
+The output APK will be generated at:
+`app/build/outputs/apk/release/app-release.apk`
 
 ---
 
-## Disclaimer
+## Author & Credits
 
-MinimalTube is an independent open-source client developed under Fair Use principles and the GNU General Public License v3.0. This project is not affiliated with, maintained by, or endorsed by Google LLC or YouTube. All trademarks belong to their respective owners.
+Developed with ❤️ by **Đoàn Tiến Đạt** ([@merrthereboy](https://github.com/merrthereboy)).
+Built on the open-source foundation of the NewPipe project.

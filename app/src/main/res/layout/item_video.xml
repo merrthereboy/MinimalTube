@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="14dp"
     app:cardBackgroundColor="@color/card_surface"
-    app:cardCornerRadius="18dp"
+    app:cardCornerRadius="16dp"
     app:cardElevation="0dp">
 
     <LinearLayout
@@ -14,19 +14,39 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <!-- Rounded Thumbnail inside Card -->
+        <!-- Rounded Thumbnail inside Card with Duration badge -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            app:cardCornerRadius="13dp"
+            app:cardCornerRadius="12dp"
             app:cardElevation="0dp">
 
-            <ImageView
-                android:id="@+id/imgThumbnail"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/bg_dark"
-                android:scaleType="centerCrop" />
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imgThumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/bg_dark"
+                    android:scaleType="centerCrop" />
+
+                <!-- Duration / Live Badge -->
+                <TextView
+                    android:id="@+id/txtDurationBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/bg_pill_inactive"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:textColor="@color/text_white"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </FrameLayout>
         </androidx.cardview.widget.CardView>
 
         <!-- Video Title -->
@@ -37,7 +57,7 @@
             android:layout_marginTop="10dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/text_title"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -47,10 +67,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/text_muted"
+            android:textColor="@color/text_sub"
             android:textSize="12sp" />
 
-        <!-- Luxury Rounded Pill Action Buttons -->
+        <!-- Action Buttons: Brand Gradient Play button + Secondary buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,16 +78,16 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <!-- Nút PHÁT (Primary White Pill) -->
+            <!-- Nút PHÁT (Brand Gradient Pill) -->
             <TextView
                 android:id="@+id/btnPlayVideo"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:background="@drawable/bg_button_pill_primary"
+                android:background="@drawable/gradient_brand_button"
                 android:gravity="center"
                 android:paddingHorizontal="20dp"
-                android:text="@string/btn_play"
-                android:textColor="@color/button_primary_text"
+                android:text="PHÁT"
+                android:textColor="@color/text_white"
                 android:textSize="11sp"
                 android:textStyle="bold" />
 
@@ -80,21 +100,25 @@
                 android:background="@drawable/bg_button_pill_secondary"
                 android:gravity="center"
                 android:paddingHorizontal="16dp"
-                android:text="@string/btn_download"
-                android:textColor="@color/button_secondary_text"
+                android:text="TẢI VỀ"
+                android:textColor="@color/text_sub"
                 android:textSize="11sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
 
             <!-- Nút LƯU (Secondary Pill) -->
             <TextView
                 android:id="@+id/btnSaveVideo"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:layout_marginStart="8dp"
                 android:background="@drawable/bg_button_pill_secondary"
                 android:gravity="center"
-                android:paddingHorizontal="16dp"
-                android:text="@string/btn_save"
-                android:textColor="@color/button_secondary_text"
+                android:paddingHorizontal="14dp"
+                android:text="LƯU"
+                android:textColor="@color/text_sub"
                 android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>

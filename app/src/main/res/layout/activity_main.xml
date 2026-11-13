@@ -3,77 +3,141 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_dark"
+    android:background="@color/bg_main"
     android:orientation="vertical">
 
-    <!-- Top Luxury Header & Brand -->
+    <!-- Top Luxury Header Bar -->
     <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <ImageView
+            android:id="@+id/imgBrandLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/logo_full" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/btnToggleSearch"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_search"
+            app:tint="@color/text_title" />
+    </LinearLayout>
+
+    <!-- Filter Chips Carousel (Only on Home tab) -->
+    <HorizontalScrollView
+        android:id="@+id/chipsScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="18dp"
-        android:paddingTop="14dp"
-        android:paddingBottom="10dp">
+        android:paddingHorizontal="14dp"
+        android:paddingBottom="8dp"
+        android:scrollbars="none">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MINIMALTUBE"
-            android:textColor="@color/text_muted"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.15" />
+            android:orientation="horizontal">
 
-        <!-- Floating Rounded Pill Tabs -->
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:scrollbars="none">
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/chipAll"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="32dp"
+                android:background="@drawable/bg_pill_chip_active"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="Tất cả"
+                android:textColor="@color/pill_active_text"
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tabHome"
-                    android:layout_width="wrap_content"
-                    android:layout_height="34dp"
-                    android:background="@drawable/bg_pill_active"
-                    android:gravity="center"
-                    android:paddingHorizontal="18dp"
-                    android:text="@string/tab_home"
-                    android:textColor="@color/pill_active_text"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
+            <TextView
+                android:id="@+id/chipLive"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_pill_chip_inactive"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="Trực tiếp"
+                android:textColor="@color/pill_inactive_text"
+                android:textSize="11sp" />
 
-                <TextView
-                    android:id="@+id/tabTrending"
-                    android:layout_width="wrap_content"
-                    android:layout_height="34dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_pill_inactive"
-                    android:gravity="center"
-                    android:paddingHorizontal="18dp"
-                    android:text="@string/tab_trending"
-                    android:textColor="@color/pill_inactive_text"
-                    android:textSize="11sp" />
+            <TextView
+                android:id="@+id/chipMusic"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_pill_chip_inactive"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="Âm nhạc"
+                android:textColor="@color/pill_inactive_text"
+                android:textSize="11sp" />
 
-                <TextView
-                    android:id="@+id/tabSearchToggle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="34dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_pill_inactive"
-                    android:gravity="center"
-                    android:paddingHorizontal="18dp"
-                    android:text="@string/tab_search"
-                    android:textColor="@color/pill_inactive_text"
-                    android:textSize="11sp" />
-            </LinearLayout>
-        </HorizontalScrollView>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/chipGaming"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_pill_chip_inactive"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="Trò chơi"
+                android:textColor="@color/pill_inactive_text"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/chipNews"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_pill_chip_inactive"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="Tin tức"
+                android:textColor="@color/pill_inactive_text"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/chipTech"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_pill_chip_inactive"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="Công nghệ"
+                android:textColor="@color/pill_inactive_text"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/chipTrending"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_pill_chip_inactive"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="Thịnh hành"
+                android:textColor="@color/pill_inactive_text"
+                android:textSize="11sp" />
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <!-- Search Input Area (Pill Design) -->
     <LinearLayout
@@ -81,8 +145,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="18dp"
-        android:paddingBottom="12dp"
+        android:paddingHorizontal="14dp"
+        android:paddingBottom="10dp"
         android:visibility="gone">
 
         <EditText
@@ -91,46 +155,46 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/bg_search_pill"
-            android:hint="@string/search_hint"
+            android:hint="Tìm kiếm video hoặc kênh..."
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:paddingHorizontal="16dp"
-            android:textColor="@color/text_primary"
-            android:textColorHint="@color/text_muted"
+            android:textColor="@color/text_title"
+            android:textColorHint="@color/text_sub"
             android:textSize="12sp" />
 
         <TextView
             android:id="@+id/btnDoSearch"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/bg_button_pill_primary"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_pill_chip_active"
             android:gravity="center"
-            android:paddingHorizontal="20dp"
-            android:text="@string/btn_search_action"
-            android:textColor="@color/button_primary_text"
+            android:paddingHorizontal="18dp"
+            android:text="TÌM"
+            android:textColor="@color/pill_active_text"
             android:textSize="11sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Embedded Player View Section (TextureView with Rounded Corners) -->
+    <!-- Embedded Floating/Docked Player View Section -->
     <LinearLayout
         android:id="@+id/playerSection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="14dp"
-        android:paddingBottom="12dp"
+        android:paddingBottom="10dp"
         android:visibility="gone">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="215dp"
             app:cardBackgroundColor="@color/card_surface"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp">
 
-            <!-- Lưu ý quan trọng: Dùng texture_view và KHÔNG gán android:background để hiển thị video mượt mà không bị đen màn hình -->
+            <!-- TextureView không có android:background để hiển thị hình ảnh hoàn hảo -->
             <androidx.media3.ui.PlayerView
                 android:id="@+id/playerView"
                 android:layout_width="match_parent"
@@ -146,7 +210,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingTop="10dp">
+            android:paddingTop="8dp">
 
             <TextView
                 android:id="@+id/txtCurrentPlayingTitle"
@@ -155,44 +219,644 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/text_primary"
+                android:textColor="@color/text_title"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/btnClosePlayer"
-                android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/bg_button_pill_secondary"
-                android:gravity="center"
-                android:paddingHorizontal="14dp"
-                android:text="@string/btn_close_player"
-                android:textColor="@color/text_muted"
-                android:textSize="10sp" />
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="6dp"
+                android:src="@drawable/ic_close_clean"
+                app:tint="@color/text_sub" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Status text / Loading -->
+    <!-- Status / Loading Notification -->
     <TextView
         android:id="@+id/txtStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="16dp"
-        android:text="@string/loading_text"
-        android:textColor="@color/text_muted"
-        android:textSize="12sp"
+        android:padding="12dp"
+        android:text="ĐANG TẢI DỮ LIỆU..."
+        android:textColor="@color/text_sub"
+        android:textSize="11sp"
         android:visibility="gone" />
 
-    <!-- Video List with rounded cards -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewVideos"
+    <!-- Main Content Frame (5 Tabs Container) -->
+    <FrameLayout
+        android:id="@+id/tabContentFrame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingHorizontal="14dp"
-        android:paddingTop="6dp"
-        android:paddingBottom="24dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- TAB 1: TRANG CHỦ -->
+        <LinearLayout
+            android:id="@+id/tabContentHome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewHome"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingHorizontal="14dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="20dp" />
+        </LinearLayout>
+
+        <!-- TAB 2: SHORTS -->
+        <LinearLayout
+            android:id="@+id/tabContentShorts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="SHORTS ĐỀ XUẤT"
+                android:textColor="@color/text_title"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewShorts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingHorizontal="14dp"
+                android:paddingBottom="20dp" />
+        </LinearLayout>
+
+        <!-- TAB 3: FANS ZONE (KÊNH ĐĂNG KÝ) -->
+        <LinearLayout
+            android:id="@+id/tabContentSubscriptions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Card Khi Chưa Đăng Nhập -->
+            <LinearLayout
+                android:id="@+id/cardSubsNotLoggedIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/bg_card_surface"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_subscriptions"
+                    app:tint="@color/active_accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="KÊNH ĐÃ ĐĂNG KÝ (FANS ZONE)"
+                    android:textColor="@color/text_title"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center"
+                    android:text="Đăng nhập tài khoản Google để đồng bộ toàn bộ kênh đăng ký YouTube và xem cập nhật mới nhất từ các nhà sáng tạo yêu thích."
+                    android:textColor="@color/text_sub"
+                    android:textSize="11sp" />
+
+                <!-- Nút Đăng nhập Google với Brand Gradient -->
+                <LinearLayout
+                    android:id="@+id/btnSubsLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="18dp"
+                    android:background="@drawable/gradient_brand_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_google" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="ĐĂNG NHẬP GOOGLE ĐỒNG BỘ"
+                        android:textColor="@color/text_white"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Danh sách video kênh đăng ký -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewSubs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingHorizontal="14dp"
+                android:paddingBottom="20dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- TAB 4: VIDEO CỦA TÔI (THƯ VIỆN & LỊCH SỬ) -->
+        <ScrollView
+            android:id="@+id/tabContentLibrary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Header Lịch sử -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_history"
+                        app:tint="@color/active_accent" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:text="LỊCH SỬ XEM GẦN ĐÂY"
+                        android:textColor="@color/text_title"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btnClearHistory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="6dp"
+                        android:text="XÓA"
+                        android:textColor="@color/text_sub"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txtEmptyHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text="Chưa có video nào trong lịch sử xem."
+                    android:textColor="@color/text_sub"
+                    android:textSize="11sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewHistory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:nestedScrollingEnabled="false" />
+
+                <!-- Danh sách phát & Yêu thích -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="DANH SÁCH &amp; BỘ SƯU TẬP"
+                    android:textColor="@color/text_title"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_card_surface"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_playlist"
+                        app:tint="@color/active_accent" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Video đã thích &amp; Đã lưu"
+                            android:textColor="@color/text_title"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Truy cập nhanh các video yêu thích"
+                            android:textColor="@color/text_sub"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_arrow_right" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- TAB 5: TÔI (CÁ NHÂN & CÀI ĐẶT) -->
+        <ScrollView
+            android:id="@+id/tabContentProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Profile Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card_surface"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="18dp">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_profile"
+                        app:tint="@color/active_accent" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtProfileName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Khách (Chưa đồng bộ)"
+                            android:textColor="@color/text_title"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txtProfileStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Chưa kết nối tài khoản Google"
+                            android:textColor="@color/text_sub"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Nút Đăng nhập / Đăng xuất Google -->
+                <LinearLayout
+                    android:id="@+id/btnProfileGoogleLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/gradient_brand_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_google" />
+
+                    <TextView
+                        android:id="@+id/txtProfileLoginAction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="ĐỒNG BỘ TÀI KHOẢN GOOGLE"
+                        android:textColor="@color/text_white"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Quick Stats Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_card_surface"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CHẾ ĐỘ XEM"
+                            android:textColor="@color/text_sub"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Sạch 100%"
+                            android:textColor="@color/active_accent"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_card_surface"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ĐỘ PHÂN GIẢI"
+                            android:textColor="@color/text_sub"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Tự động (1080p)"
+                            android:textColor="@color/text_title"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Cài đặt & Về ứng dụng -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="THÔNG TIN &amp; CÀI ĐẶT"
+                    android:textColor="@color/text_title"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_card_surface"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MinimalTube"
+                        android:textColor="@color/text_title"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Phiên bản: v1.1.0 Stable (Tự động cập nhật)"
+                        android:textColor="@color/text_sub"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Nhà phát triển: Đoàn Tiến Đạt (merrthereboy)"
+                        android:textColor="@color/text_sub"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Mã nguồn: github.com/merrthereboy/MinimalTube"
+                        android:textColor="@color/active_accent"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+
+    <!-- Bottom Luxury Navigation Bar (5 Tabs) -->
+    <LinearLayout
+        android:id="@+id/bottomNavBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/bg_bottom_nav"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <!-- Tab 1: Trang chủ -->
+        <LinearLayout
+            android:id="@+id/navHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iconNavHome"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_home"
+                app:tint="@color/active_accent" />
+
+            <TextView
+                android:id="@+id/txtNavHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="TRANG CHỦ"
+                android:textColor="@color/active_accent"
+                android:textSize="9sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Tab 2: Shorts -->
+        <LinearLayout
+            android:id="@+id/navShorts"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iconNavShorts"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_shorts"
+                app:tint="@color/inactive_nav" />
+
+            <TextView
+                android:id="@+id/txtNavShorts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="SHORTS"
+                android:textColor="@color/inactive_nav"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <!-- Tab 3: Fans Zone (Kênh đăng ký) -->
+        <LinearLayout
+            android:id="@+id/navSubs"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iconNavSubs"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_subscriptions"
+                app:tint="@color/inactive_nav" />
+
+            <TextView
+                android:id="@+id/txtNavSubs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="FANS ZONE"
+                android:textColor="@color/inactive_nav"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <!-- Tab 4: Video Của Tôi (Thư viện) -->
+        <LinearLayout
+            android:id="@+id/navLibrary"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iconNavLibrary"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_library"
+                app:tint="@color/inactive_nav" />
+
+            <TextView
+                android:id="@+id/txtNavLibrary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="VIDEO CỦA TÔI"
+                android:textColor="@color/inactive_nav"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <!-- Tab 5: Tôi (Cá nhân) -->
+        <LinearLayout
+            android:id="@+id/navProfile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iconNavProfile"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_profile"
+                app:tint="@color/inactive_nav" />
+
+            <TextView
+                android:id="@+id/txtNavProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="TÔI"
+                android:textColor="@color/inactive_nav"
+                android:textSize="9sp" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

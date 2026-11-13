@@ -5,6 +5,9 @@ on:
     branches: [ "main", "master" ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,11 +27,27 @@ jobs:
       with:
         gradle-version: '8.5'
 
-    - name: Build Debug APK
-      run: gradle assembleDebug --stacktrace
+    - name: Build Release APK
+      run: gradle assembleRelease --stacktrace
+
+    - name: Prepare APK Release Artifact
+      run: |
+        cp app/build/outputs/apk/release/app-release.apk MinimalTube-v1.1.0.apk
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: MinimalTube-Debug-APK
-        path: app/build/outputs/apk/debug/*.apk
+        name: MinimalTube-v1.1.0-APK
+        path: MinimalTube-v1.1.0.apk
+
+    - name: Publish GitHub Release v1.1.0
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v1.1.0
+        name: MinimalTube v1.1.0 (Luxury Dark & Account Sync)
+        body_path: RELEASE_NOTES.md
+        files: MinimalTube-v1.1.0.apk
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

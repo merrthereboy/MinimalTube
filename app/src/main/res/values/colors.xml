@@ -1,33 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Luxury Dark Palette (Obsidian & Titanium) -->
-    <color name="bg_dark">#0B0C10</color>
-    <color name="bg_black">#0B0C10</color>
-    
-    <color name="card_surface">#14151D</color>
-    <color name="card_black">#14151D</color>
-    <color name="card_border">#252736</color>
+    <!-- Backgrounds (80% Dark Canvas) -->
+    <color name="bg_main">#0D0D11</color>
+    <color name="bg_dark">#0D0D11</color>
+    <color name="bg_black">#0D0D11</color>
+    <color name="bg_surface">#18181F</color>
+    <color name="card_surface">#18181F</color>
+    <color name="card_black">#18181F</color>
+    <color name="border_subtle">#262633</color>
+    <color name="border_gray">#262633</color>
+    <color name="border_active">#00F2FE</color>
 
-    <color name="pill_active_bg">#FFFFFF</color>
-    <color name="pill_active_text">#0B0C10</color>
-    
-    <color name="pill_inactive_bg">#181A24</color>
-    <color name="pill_inactive_border">#2A2C3C</color>
-    <color name="pill_inactive_text">#8E92A4</color>
+    <!-- Typography (15% Text) -->
+    <color name="text_title">#FFFFFF</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_sub">#A1A1AA</color>
+    <color name="text_muted">#A1A1AA</color>
+
+    <!-- Brand Gradient Accent Colors (5% Highlights) -->
+    <color name="accent_cyan">#00F2FE</color>
+    <color name="accent_blue">#2472FC</color>
+    <color name="accent_violet">#7928CA</color>
+    <color name="accent_magenta">#FF2E93</color>
+    <color name="accent_peach">#FFBE98</color>
+
+    <!-- Active State Monotone -->
+    <color name="active_accent">#00F2FE</color>
+    <color name="inactive_nav">#71717A</color>
+    <color name="surface_dark">#18181F</color>
+
+    <color name="pill_active_bg">#00F2FE</color>
+    <color name="pill_active_text">#0D0D11</color>
+    <color name="pill_inactive_bg">#18181F</color>
+    <color name="pill_inactive_border">#262633</color>
+    <color name="pill_inactive_text">#A1A1AA</color>
 
     <color name="button_primary_bg">#FFFFFF</color>
-    <color name="button_primary_text">#0B0C10</color>
-
-    <color name="button_secondary_bg">#1E202C</color>
-    <color name="button_secondary_border">#303345</color>
-    <color name="button_secondary_text">#C4C7D7</color>
-
-    <color name="text_primary">#F8F9FA</color>
-    <color name="text_white">#F8F9FA</color>
-    <color name="text_muted">#848799</color>
-    
-    <color name="search_bg">#151620</color>
-    <color name="search_border">#2B2D3D</color>
-    <color name="border_gray">#252736</color>
-    <color name="surface_dark">#181A24</color>
+    <color name="button_primary_text">#0D0D11</color>
+    <color name="button_secondary_bg">#18181F</color>
+    <color name="button_secondary_border">#262633</color>
+    <color name="button_secondary_text">#A1A1AA</color>
 </resources>

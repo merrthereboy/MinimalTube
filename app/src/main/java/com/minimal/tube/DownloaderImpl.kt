@@ -16,9 +16,12 @@ class DownloaderImpl private constructor() : Downloader() {
         .followRedirects(true)
         .build()
 
+    @Volatile
+    var userCookies: String = ""
+
     companion object {
         const val USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0"
-        const val YOUTUBE_COOKIES = "PREF=f2=8000000; SOCS=CAESEwgDEgk0ODE3Nzk3MjQaAmVuIAEaBgiA_LyaBg"
+        const val DEFAULT_YOUTUBE_COOKIES = "PREF=f2=8000000&hl=vi&gl=VN; SOCS=CAESEwgDEgk0ODE3Nzk3MjQaAmVuIAEaBgiA_LyaBg"
 
         private var instance: DownloaderImpl? = null
 
@@ -43,7 +46,12 @@ class DownloaderImpl private constructor() : Downloader() {
             .addHeader("Accept-Language", "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7")
 
         if (url.contains("youtube.com")) {
-            requestBuilder.addHeader("Cookie", YOUTUBE_COOKIES)
+            val combinedCookie = if (userCookies.isNotBlank()) {
+                "$userCookies; $DEFAULT_YOUTUBE_COOKIES"
+            } else {
+                DEFAULT_YOUTUBE_COOKIES
+            }
+            requestBuilder.addHeader("Cookie", combinedCookie)
         }
 
         headers?.forEach { (name, values) ->
